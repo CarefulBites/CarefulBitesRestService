@@ -12,9 +12,14 @@ namespace CarefulBitesAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet("foodItems", Name = "GetFoodItems")]
-        public IEnumerable<Item> GetFoodItems() {
-            return CarefulBitesManager.GetFoodItems();
+        [HttpGet("foodItems", Name = "GetAllFoodItems")]
+        public IEnumerable<Item> GetAllFoodItems() {
+            return CarefulBitesManager.GetAllFoodItems();
+        }
+
+        [HttpGet("foodItems/{itemId}", Name = "GetFoodItem")]
+        public Item GetFoodItem(int itemId) {
+            return CarefulBitesManager.GetFoodItem(itemId);
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]

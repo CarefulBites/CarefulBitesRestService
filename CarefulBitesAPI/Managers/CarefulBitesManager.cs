@@ -2,7 +2,13 @@
     public static class CarefulBitesManager {
         private static CarefulBitesDbContext _dbContext = new CarefulBitesDbContext();
 
-        public static IEnumerable<Item> GetFoodItems() {
+        public static Item GetFoodItem(int itemId) {
+            var item = _dbContext.Items.Find(itemId);
+
+            return item;
+        }
+
+        public static IEnumerable<Item> GetAllFoodItems() {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             return foodItemList;
