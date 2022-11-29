@@ -1,4 +1,7 @@
-﻿namespace CarefulBitesAPI.Managers {
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace CarefulBitesAPI.Managers {
     public static class CarefulBitesManager {
         private static CarefulBitesDbContext _dbContext = new CarefulBitesDbContext();
 
@@ -37,6 +40,12 @@
 
                 _dbContext.SaveChanges();
             }
+        }
+
+        public static void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
+            var item = _dbContext.Items.Find(itemId);
+
+            value.ApplyTo(item);
         }
 
         public static void DeleteFoodItem(int itemId) {

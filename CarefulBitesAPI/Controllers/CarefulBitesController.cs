@@ -1,5 +1,10 @@
 using CarefulBitesAPI.Managers;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
+using static Azure.Core.HttpHeader;
+using System.Runtime.Serialization;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace CarefulBitesAPI.Controllers
 {
@@ -30,6 +35,12 @@ namespace CarefulBitesAPI.Controllers
         [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]
         public void PutFoodItem(int itemId, [FromBody] Item foodItem) {
             CarefulBitesManager.PutFoodItem(itemId, foodItem);
+        }
+
+        [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
+        public void PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
+            //nodes collection is an in memory list of nodes for this example
+            CarefulBitesManager.PatchFoodItem(itemId, value);
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
