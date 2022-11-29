@@ -18,13 +18,18 @@ namespace CarefulBitesAPI.Controllers
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
-        public void PostFoodItem(Item foodItem) {
+        public void PostFoodItem([FromBody] Item foodItem) {
             CarefulBitesManager.PostFoodItem(foodItem);
         }
 
-        [HttpPut("foodItems", Name = "PutFoodItem")]
-        public void PutFoodItem(Item foodItem) {
-            CarefulBitesManager.PutFoodItem(foodItem);
+        [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]
+        public void PutFoodItem(int itemId, [FromBody] Item foodItem) {
+            CarefulBitesManager.PutFoodItem(itemId, foodItem);
+        }
+
+        [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
+        public void DeleteFoodItem(int itemId) {
+            CarefulBitesManager.DeleteFoodItem(itemId);
         }
 
         [HttpGet("users", Name = "GetUsers")]
@@ -33,13 +38,18 @@ namespace CarefulBitesAPI.Controllers
         }
 
         [HttpPost("users", Name = "PostUser")]
-        public void PostUser(User user) {
+        public void PostUser([FromBody] User user) {
             CarefulBitesManager.PostUser(user);
         }
 
-        [HttpPut("users", Name = "PutUser")]
-        public void PutUser(User user) {
-            CarefulBitesManager.PutUser(user);
+        [HttpPut("users/{userId}", Name = "PutUser")]
+        public void PutUser(int userId, [FromBody] User user) {
+            CarefulBitesManager.PutUser(userId, user);
+        }
+
+        [HttpDelete("foodItems/{userId}", Name = "DeleteUser")]
+        public void DeleteUser(int userId) {
+            CarefulBitesManager.DeleteUser(userId);
         }
 
         [HttpGet("itemStorages", Name = "GetItemStorages")]
@@ -48,13 +58,18 @@ namespace CarefulBitesAPI.Controllers
         }
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]
-        public void PostItemStorages(ItemStorage itemStorage) {
+        public void PostItemStorages([FromBody] ItemStorage itemStorage) {
             CarefulBitesManager.PostItemStorage(itemStorage);
         }
 
-        [HttpPut("itemStorages", Name = "PutItemStorage")]
-        public void PutItemStorage(ItemStorage itemStorage) {
-            CarefulBitesManager.PutItemStorage(itemStorage);
+        [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]
+        public void PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
+            CarefulBitesManager.PutItemStorage(itemStorageId, itemStorage);
+        }
+
+        [HttpDelete("foodItems/{itemStorageId}", Name = "DeleteItemStorage")]
+        public void DeleteItemStorage(int itemStorageId) {
+            CarefulBitesManager.DeleteItemStorage(itemStorageId);
         }
     }
 }
