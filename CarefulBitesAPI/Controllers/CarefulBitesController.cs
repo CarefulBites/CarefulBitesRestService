@@ -22,6 +22,11 @@ namespace CarefulBitesAPI.Controllers
             CarefulBitesManager.PostFoodItem(foodItem);
         }
 
+        [HttpPut("foodItems", Name = "PutFoodItem")]
+        public void PutFoodItem(Item foodItem) {
+            CarefulBitesManager.PutFoodItem(foodItem);
+        }
+
         [HttpGet("users", Name = "GetUsers")]
         public IEnumerable<User> GetUsers() {
             return CarefulBitesManager.GetUsers();
@@ -32,6 +37,11 @@ namespace CarefulBitesAPI.Controllers
             CarefulBitesManager.PostUser(user);
         }
 
+        [HttpPut("users", Name = "PutUser")]
+        public void PutUser(User user) {
+            CarefulBitesManager.PutUser(user);
+        }
+
         [HttpGet("itemStorages", Name = "GetItemStorages")]
         public IEnumerable<ItemStorage> GetItemStorages() {
             return CarefulBitesManager.GetItemStorages();
@@ -40,6 +50,11 @@ namespace CarefulBitesAPI.Controllers
         [HttpPost("itemStorages", Name = "PostItemStorage")]
         public void PostItemStorages(ItemStorage itemStorage) {
             CarefulBitesManager.PostItemStorage(itemStorage);
+        }
+
+        [HttpPut("itemStorages", Name = "PutItemStorage")]
+        public void PutItemStorage(ItemStorage itemStorage) {
+            CarefulBitesManager.PutItemStorage(itemStorage);
         }
     }
 }

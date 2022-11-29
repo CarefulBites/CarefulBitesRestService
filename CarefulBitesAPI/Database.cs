@@ -853,7 +853,7 @@ namespace CarefulBitesAPI
     // Items
     public class Item
     {
-        public int ItemId { get; set; } // ItemId (Primary key)
+        public int? ItemId { get; set; } // ItemId (Primary key)
         public string Name { get; set; } // Name (length: 50)
         public int? CaloriesPer { get; set; } // CaloriesPer
         public DateTime? ExpirationDate { get; set; } // ExpirationDate
@@ -874,7 +874,7 @@ namespace CarefulBitesAPI
     // ItemStorage
     public class ItemStorage
     {
-        public int ItemStorageId { get; set; } // ItemStorageId (Primary key)
+        public int? ItemStorageId { get; set; } // ItemStorageId (Primary key)
         public string Name { get; set; } // Name (length: 50)
         public int UserId { get; set; } // UserId
 
@@ -912,7 +912,7 @@ namespace CarefulBitesAPI
     // Users
     public class User
     {
-        public int UserId { get; set; } // UserId (Primary key)
+        public int? UserId { get; set; } // UserId (Primary key)
         public string Username { get; set; } // Username (length: 50)
         public string Password { get; set; } // Password (length: 50)
 

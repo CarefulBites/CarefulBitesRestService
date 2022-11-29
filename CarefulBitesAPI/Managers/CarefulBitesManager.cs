@@ -7,14 +7,36 @@ namespace CarefulBitesAPI.Managers {
 
         public static IEnumerable<Item> GetFoodItems() {
             List<Item> foodItemList = _dbContext.Items.ToList();
-            
+
             return foodItemList;
         }
 
-        public static void PostFoodItem(Item foodItem) {
+        public static void PostFoodItem(Item foodItem)
+        {
+            foodItem.ItemId = null;
+
             _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();
+        }
+
+        public static void PutFoodItem(Item foodItem)
+        {
+            var oldItem = _dbContext.Items.Find(foodItem.ItemId);
+
+            if (oldItem != null)
+            {
+                oldItem.Amount = foodItem.Amount;
+                oldItem.CaloriesPer = foodItem.CaloriesPer;
+                oldItem.DaysAfterOpen = foodItem.DaysAfterOpen;
+                oldItem.ExpirationDate = foodItem.ExpirationDate;
+                oldItem.Name = foodItem.Name;
+                oldItem.ItemStorageId = foodItem.ItemStorageId;
+                oldItem.OpenDate = foodItem.OpenDate;
+                oldItem.Unit = foodItem.Unit;
+
+                _dbContext.SaveChanges();
+            }
         }
 
         public static IEnumerable<User> GetUsers() {
@@ -29,6 +51,17 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
+        public static void PutUser(User user) {
+            var oldUser = _dbContext.Users.Find(user.UserId);
+
+            if (oldUser != null) {
+                oldUser.Username = user.Username;
+                oldUser.Password = user.Password;
+
+                _dbContext.SaveChanges();
+            }
+        }
+
         public static IEnumerable<ItemStorage> GetItemStorages() {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
@@ -39,6 +72,18 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.ItemStorages.Add(itemStorage);
 
             _dbContext.SaveChanges();
+        }
+
+        public static void PutItemStorage(ItemStorage itemStorage) {
+            var oldItemStorage = _dbContext.ItemStorages.Find(itemStorage.ItemStorageId);
+
+            if (oldItemStorage != null) {
+                oldItemStorage.Name= itemStorage.Name;
+                oldItemStorage.User = itemStorage.User;
+                oldItemStorage.UserId = itemStorage.UserId;
+
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
