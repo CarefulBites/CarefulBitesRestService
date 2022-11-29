@@ -52,7 +52,7 @@ namespace CarefulBitesAPI.Controllers
             CarefulBitesManager.PutUser(userId, user);
         }
 
-        [HttpDelete("foodItems/{userId}", Name = "DeleteUser")]
+        [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public void DeleteUser(int userId) {
             CarefulBitesManager.DeleteUser(userId);
         }
@@ -72,7 +72,7 @@ namespace CarefulBitesAPI.Controllers
             CarefulBitesManager.PutItemStorage(itemStorageId, itemStorage);
         }
 
-        [HttpDelete("foodItems/{itemStorageId}", Name = "DeleteItemStorage")]
+        [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
         public void DeleteItemStorage(int itemStorageId) {
             CarefulBitesManager.DeleteItemStorage(itemStorageId);
         }
