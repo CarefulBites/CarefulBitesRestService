@@ -116,7 +116,7 @@ namespace CarefulBitesAPI.Managers {
 
             if (oldItemStorage != null) {
                 oldItemStorage.Name = itemStorage.Name;
-                oldItemStorage.User = itemStorage.User;
+                //oldItemStorage.User = itemStorage.User;
                 oldItemStorage.UserId = itemStorage.UserId;
 
                 _dbContext.SaveChanges();
