@@ -6,11 +6,19 @@ using System.Runtime.Serialization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
-namespace CarefulBitesAPI.Controllers
-{
+namespace CarefulBitesAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class CarefulBitesController : ControllerBase {
+
+#if DEBUG
+        private Uri baseUri = new Uri("https://localhost:7116/CarefulBites/");
+#endif
+#if RELEASE
+        private Uri baseUri = new Uri("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
+#endif
+
+
         private readonly ILogger<CarefulBitesController> _logger;
 
         public CarefulBitesController(ILogger<CarefulBitesController> logger) {
@@ -29,8 +37,8 @@ namespace CarefulBitesAPI.Controllers
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
         public ActionResult PostFoodItem([FromBody] Item foodItem) {
-            CarefulBitesManager.PostFoodItem(foodItem);
-            return NoContent();
+            var createdItem = CarefulBitesManager.PostFoodItem(foodItem);
+            return Created(new Uri(baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
         }
 
         [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]

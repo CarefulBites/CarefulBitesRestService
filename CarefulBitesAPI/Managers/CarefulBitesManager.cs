@@ -17,12 +17,14 @@ namespace CarefulBitesAPI.Managers {
             return foodItemList;
         }
 
-        public static void PostFoodItem(Item foodItem) {
+        public static Item PostFoodItem(Item foodItem) {
             foodItem.ItemId = null;
 
-            _dbContext.Items.Add(foodItem);
+            var newItem = _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();
+
+            return (newItem.Entity);
         }
 
         public static void PutFoodItem(int itemId, Item foodItem) {
