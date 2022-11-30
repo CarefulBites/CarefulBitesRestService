@@ -68,6 +68,12 @@ namespace CarefulBitesAPI.Controllers
             return NoContent();
         }
 
+        [HttpPatch("users/{userId}", Name = "PatchUser")]
+        public ActionResult PatchUser(int userId, [FromBody] JsonPatchDocument<User> value) {
+            CarefulBitesManager.PatchUser(userId, value);
+            return NoContent();
+        }
+
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public ActionResult DeleteUser(int userId) {
             CarefulBitesManager.DeleteUser(userId);
@@ -88,6 +94,12 @@ namespace CarefulBitesAPI.Controllers
         [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]
         public ActionResult PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
             CarefulBitesManager.PutItemStorage(itemStorageId, itemStorage);
+            return NoContent();
+        }
+
+        [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]
+        public ActionResult PatchItemStorage(int itemStorageId, [FromBody] JsonPatchDocument<ItemStorage> value) {
+            CarefulBitesManager.PatchItemStorage(itemStorageId, value);
             return NoContent();
         }
 

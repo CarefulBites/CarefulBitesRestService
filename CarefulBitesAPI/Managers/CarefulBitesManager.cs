@@ -82,6 +82,14 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
+        public static void PatchUser(int userId, JsonPatchDocument<User> value) {
+            var user = _dbContext.Users.Find(userId);
+
+            value.ApplyTo(user);
+
+            _dbContext.SaveChanges();
+        }
+
         public static void DeleteUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
@@ -113,6 +121,14 @@ namespace CarefulBitesAPI.Managers {
 
                 _dbContext.SaveChanges();
             }
+        }
+
+        public static void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
+            var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
+
+            value.ApplyTo(itemStorage);
+
+            _dbContext.SaveChanges();
         }
 
         public static void DeleteItemStorage(int itemStorageId) {
