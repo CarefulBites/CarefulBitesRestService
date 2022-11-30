@@ -18,74 +18,83 @@ namespace CarefulBitesAPI.Controllers
         }
 
         [HttpGet("foodItems", Name = "GetAllFoodItems")]
-        public IEnumerable<Item> GetAllFoodItems() {
-            return CarefulBitesManager.GetAllFoodItems();
+        public ActionResult<IEnumerable<Item>> GetAllFoodItems() {
+            return Ok(CarefulBitesManager.GetAllFoodItems());
         }
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItem")]
-        public Item GetFoodItem(int itemId) {
-            return CarefulBitesManager.GetFoodItem(itemId);
+        public ActionResult<Item> GetFoodItem(int itemId) {
+            return Ok(CarefulBitesManager.GetFoodItem(itemId));
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
-        public void PostFoodItem([FromBody] Item foodItem) {
+        public ActionResult PostFoodItem([FromBody] Item foodItem) {
             CarefulBitesManager.PostFoodItem(foodItem);
+            return NoContent();
         }
 
         [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]
-        public void PutFoodItem(int itemId, [FromBody] Item foodItem) {
+        public ActionResult PutFoodItem(int itemId, [FromBody] Item foodItem) {
             CarefulBitesManager.PutFoodItem(itemId, foodItem);
+            return NoContent();
         }
 
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
-        public void PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
-            //nodes collection is an in memory list of nodes for this example
+        public ActionResult PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
             CarefulBitesManager.PatchFoodItem(itemId, value);
+            return NoContent();
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
-        public void DeleteFoodItem(int itemId) {
+        public ActionResult DeleteFoodItem(int itemId) {
             CarefulBitesManager.DeleteFoodItem(itemId);
+            return NoContent();
         }
 
         [HttpGet("users", Name = "GetUsers")]
-        public IEnumerable<User> GetUsers() {
-            return CarefulBitesManager.GetUsers();
+        public ActionResult<IEnumerable<User>> GetUsers() {
+            return Ok(CarefulBitesManager.GetUsers());
         }
 
         [HttpPost("users", Name = "PostUser")]
-        public void PostUser([FromBody] User user) {
+        public ActionResult PostUser([FromBody] User user) {
             CarefulBitesManager.PostUser(user);
+            return NoContent();
         }
 
         [HttpPut("users/{userId}", Name = "PutUser")]
-        public void PutUser(int userId, [FromBody] User user) {
+        public ActionResult PutUser(int userId, [FromBody] User user) {
             CarefulBitesManager.PutUser(userId, user);
+            return NoContent();
         }
 
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
-        public void DeleteUser(int userId) {
+        public ActionResult DeleteUser(int userId) {
             CarefulBitesManager.DeleteUser(userId);
+            return NoContent();
         }
 
         [HttpGet("itemStorages", Name = "GetItemStorages")]
-        public IEnumerable<ItemStorage> GetItemStorages() {
-            return CarefulBitesManager.GetItemStorages();
+        public ActionResult<IEnumerable<ItemStorage>> GetItemStorages() {
+            return Ok(CarefulBitesManager.GetItemStorages());
         }
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]
-        public void PostItemStorages([FromBody] ItemStorage itemStorage) {
+        public ActionResult PostItemStorages([FromBody] ItemStorage itemStorage) {
             CarefulBitesManager.PostItemStorage(itemStorage);
+            return NoContent();
         }
 
         [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]
-        public void PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
+        public ActionResult PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
             CarefulBitesManager.PutItemStorage(itemStorageId, itemStorage);
+            return NoContent();
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
-        public void DeleteItemStorage(int itemStorageId) {
+        public ActionResult DeleteItemStorage(int itemStorageId) {
             CarefulBitesManager.DeleteItemStorage(itemStorageId);
+            return NoContent();
         }
     }
 }

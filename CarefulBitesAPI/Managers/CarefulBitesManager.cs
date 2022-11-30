@@ -46,6 +46,8 @@ namespace CarefulBitesAPI.Managers {
             var item = _dbContext.Items.Find(itemId);
 
             value.ApplyTo(item);
+
+            _dbContext.SaveChanges();
         }
 
         public static void DeleteFoodItem(int itemId) {
