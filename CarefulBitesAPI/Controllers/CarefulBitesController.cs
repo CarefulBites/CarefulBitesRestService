@@ -93,8 +93,7 @@ namespace CarefulBitesAPI.Controllers {
         }
 
         [HttpGet("users/byUsername/{username}", Name = "GetUserByUsername")]
-        public ActionResult<User> GetUserByUsername(string username)
-        {
+        public ActionResult<User> GetUserByUsername(string username) {
             var user = _manager.GetUserByUsername(username);
 
             if (user != null)
@@ -106,7 +105,15 @@ namespace CarefulBitesAPI.Controllers {
         [HttpPost("users", Name = "PostUser")]
         public ActionResult PostUser([FromBody] User user) {
             var createdUser = _manager.PostUser(user);
-            return Created(new Uri(baseUri, $"users/{user.UserId}"), createdUser);
+
+            switch (createdUser.error) {
+                case null:
+                    return Created(new Uri(baseUri, $"users/{user.UserId}"), createdUser);
+                case ClientError.Conflict:
+                    return Conflict();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpPut("users/{userId}", Name = "PutUser")]

@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarefulBitesAPI.Managers {
+    public enum ClientError {
+        Conflict
+    }
+
     public class CarefulBitesManager {
         private ICarefulBitesDbContext _dbContext;
 
@@ -78,7 +82,7 @@ namespace CarefulBitesAPI.Managers {
 
         public User? GetUserByUsername(string username) {
             var newUser = _dbContext.Users.ToList().Find(u => u.Username == username);
-                
+
             return newUser;
         }
 
@@ -88,14 +92,24 @@ namespace CarefulBitesAPI.Managers {
             return userList;
         }
 
-        public User PostUser(User user) {
+        public (User? user, ClientError? error) PostUser(User user) {
             user.UserId = null;
+
+            var userWithSameName = _dbContext.Users.ToList().Exists(u => u.Username.Equals(user.Username));
+
+            if (userWithSameName)
+                return (null, ClientError.Conflict);
 
             var newUser = _dbContext.Users.Add(user);
 
-            _dbContext.SaveChanges();
+            //try {
+            //    _dbContext.SaveChanges();
+            //} catch (DbUpdateException e) {
+            //    Console.WriteLine(e);
+            //    return null;
+            //}
 
-            return (newUser.Entity);
+            return (newUser.Entity, null);
         }
 
         public void PutUser(int userId, User user) {
