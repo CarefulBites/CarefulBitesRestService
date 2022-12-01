@@ -70,10 +70,16 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public User? GetUser(int userId) {
+        public User? GetUserByUserId(int userId) {
             var user = _dbContext.Users.Find(userId);
 
             return user;
+        }
+
+        public User? GetUserByUsername(string username) {
+            var newUser = _dbContext.Users.ToList().Find(u => u.Username == username);
+                
+            return newUser;
         }
 
         public IEnumerable<User> GetAllUsers() {

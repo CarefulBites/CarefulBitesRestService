@@ -82,9 +82,20 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("users/{userId}", Name = "GetUser")]
-        public ActionResult<User> GetUser(int userId) {
-            var user = _manager.GetUser(userId);
+        [HttpGet("users/{userId}", Name = "GetUserByUserId")]
+        public ActionResult<User> GetUserByUserId(int userId) {
+            var user = _manager.GetUserByUserId(userId);
+
+            if (user != null)
+                return Ok(user);
+
+            return NotFound();
+        }
+
+        [HttpGet("users/byUsername/{username}", Name = "GetUserByUsername")]
+        public ActionResult<User> GetUserByUsername(string username)
+        {
+            var user = _manager.GetUserByUsername(username);
 
             if (user != null)
                 return Ok(user);
