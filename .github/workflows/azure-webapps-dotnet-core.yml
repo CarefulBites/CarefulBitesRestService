@@ -56,7 +56,7 @@ jobs:
         run: dotnet build --configuration Release
         
       - name: Test
-        run: dotnet test --verbosity normal
+        run: dotnet test
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
