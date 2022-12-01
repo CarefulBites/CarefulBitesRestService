@@ -18,7 +18,6 @@ namespace CarefulBitesAPI.Controllers {
         private Uri baseUri = new Uri("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
 #endif
 
-
         private readonly ILogger<CarefulBitesController> _logger;
 
         public CarefulBitesController(ILogger<CarefulBitesController> logger) {
@@ -66,8 +65,8 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("users", Name = "PostUser")]
         public ActionResult PostUser([FromBody] User user) {
-            CarefulBitesManager.PostUser(user);
-            return NoContent();
+            var createdUser = CarefulBitesManager.PostUser(user);
+            return Created(new Uri(baseUri, $"users/{user.UserId}"), createdUser);
         }
 
         [HttpPut("users/{userId}", Name = "PutUser")]
@@ -95,8 +94,8 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]
         public ActionResult PostItemStorages([FromBody] ItemStorage itemStorage) {
-            CarefulBitesManager.PostItemStorage(itemStorage);
-            return NoContent();
+            var createdItemStorage = CarefulBitesManager.PostItemStorage(itemStorage);
+            return Created(new Uri(baseUri, $"itemStorages/{itemStorage.ItemStorageId}"), createdItemStorage);
         }
 
         [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]

@@ -67,10 +67,14 @@ namespace CarefulBitesAPI.Managers {
             return userList;
         }
 
-        public static void PostUser(User user) {
-            _dbContext.Users.Add(user);
+        public static User PostUser(User user) {
+            user.UserId = null;
+
+            var newUser = _dbContext.Users.Add(user);
 
             _dbContext.SaveChanges();
+
+            return (newUser.Entity);
         }
 
         public static void PutUser(int userId, User user) {
@@ -107,10 +111,14 @@ namespace CarefulBitesAPI.Managers {
             return itemStorageList;
         }
 
-        public static void PostItemStorage(ItemStorage itemStorage) {
-            _dbContext.ItemStorages.Add(itemStorage);
+        public static ItemStorage PostItemStorage(ItemStorage itemStorage) {
+            itemStorage.ItemStorageId = null;
+
+            var newItemStorage = _dbContext.ItemStorages.Add(itemStorage);
 
             _dbContext.SaveChanges();
+
+            return newItemStorage.Entity;
         }
 
         public static void PutItemStorage(int itemStorageId, ItemStorage itemStorage) {
