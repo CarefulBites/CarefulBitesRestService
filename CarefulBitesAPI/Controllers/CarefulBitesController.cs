@@ -68,9 +68,24 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("users", Name = "GetUsers")]
-        public ActionResult<IEnumerable<User>> GetUsers() {
-            return Ok(CarefulBitesManager.GetUsers());
+        [HttpGet("users", Name = "GetAllUsers")]
+        public ActionResult<IEnumerable<User>> GetAllUsers() {
+            var users = CarefulBitesManager.GetAllUsers();
+
+            if (users.Any())
+                return Ok(users);
+
+            return NoContent();
+        }
+
+        [HttpGet("users", Name = "GetUser")]
+        public ActionResult<User> GetUser(int userId) {
+            var user = CarefulBitesManager.GetUser(userId);
+
+            if (user != null)
+                return Ok(user);
+
+            return NotFound();
         }
 
         [HttpPost("users", Name = "PostUser")]
@@ -97,9 +112,24 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("itemStorages", Name = "GetItemStorages")]
-        public ActionResult<IEnumerable<ItemStorage>> GetItemStorages() {
-            return Ok(CarefulBitesManager.GetItemStorages());
+        [HttpGet("itemStorages", Name = "GetAllItemStorages")]
+        public ActionResult<IEnumerable<ItemStorage>> GetAllItemStorages() {
+            var itemStorages = CarefulBitesManager.GetAllItemStorages();
+
+            if (itemStorages.Any())
+                return Ok(itemStorages);
+
+            return NoContent();
+        }
+
+        [HttpGet("itemStorages", Name = "GetItemStorage")]
+        public ActionResult<ItemStorage> GetItemStorage(int itemStorageId) {
+            var itemStorage = CarefulBitesManager.GetItemStorage(itemStorageId);
+
+            if (itemStorage != null)
+                return Ok(itemStorage);
+
+            return NotFound();
         }
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]

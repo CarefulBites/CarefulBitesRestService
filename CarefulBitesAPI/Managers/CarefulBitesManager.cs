@@ -62,7 +62,13 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static IEnumerable<User> GetUsers() {
+        public static User? GetUser(int userId) {
+            var user = _dbContext.Users.Find(userId);
+
+            return user;
+        }
+
+        public static IEnumerable<User> GetAllUsers() {
             List<User> userList = _dbContext.Users.ToList();
 
             return userList;
@@ -107,10 +113,16 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static IEnumerable<ItemStorage> GetItemStorages() {
+        public static IEnumerable<ItemStorage> GetAllItemStorages() {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
             return itemStorageList;
+        }
+
+        public static ItemStorage? GetItemStorage(int itemStorageId) {
+            var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
+
+            return itemStorage;
         }
 
         public static ItemStorage PostItemStorage(ItemStorage itemStorage) {
