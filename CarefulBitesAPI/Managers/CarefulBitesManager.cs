@@ -5,7 +5,7 @@ namespace CarefulBitesAPI.Managers {
     public static class CarefulBitesManager {
         private static CarefulBitesDbContext _dbContext = new CarefulBitesDbContext();
 
-        public static Item GetFoodItem(int itemId) {
+        public static Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             return item;
@@ -47,7 +47,8 @@ namespace CarefulBitesAPI.Managers {
         public static void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
             var item = _dbContext.Items.Find(itemId);
 
-            value.ApplyTo(item);
+            if (item != null)
+                value.ApplyTo(item);
 
             _dbContext.SaveChanges();
         }
@@ -91,7 +92,8 @@ namespace CarefulBitesAPI.Managers {
         public static void PatchUser(int userId, JsonPatchDocument<User> value) {
             var user = _dbContext.Users.Find(userId);
 
-            value.ApplyTo(user);
+            if (user != null)
+                value.ApplyTo(user);
 
             _dbContext.SaveChanges();
         }
@@ -136,7 +138,8 @@ namespace CarefulBitesAPI.Managers {
         public static void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
-            value.ApplyTo(itemStorage);
+            if (itemStorage != null)
+                value.ApplyTo(itemStorage);
 
             _dbContext.SaveChanges();
         }

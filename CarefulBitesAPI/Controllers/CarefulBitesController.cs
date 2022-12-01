@@ -26,12 +26,22 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpGet("foodItems", Name = "GetAllFoodItems")]
         public ActionResult<IEnumerable<Item>> GetAllFoodItems() {
-            return Ok(CarefulBitesManager.GetAllFoodItems());
+            var items = CarefulBitesManager.GetAllFoodItems();
+
+            if (items.Any())
+                return Ok(items);
+
+            return NoContent();
         }
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItem")]
         public ActionResult<Item> GetFoodItem(int itemId) {
-            return Ok(CarefulBitesManager.GetFoodItem(itemId));
+            var item = CarefulBitesManager.GetFoodItem(itemId);
+
+            if (item != null)
+                return Ok(CarefulBitesManager.GetFoodItem(itemId));
+
+            return NotFound();
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
