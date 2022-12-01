@@ -6,10 +6,11 @@ namespace CarefulBitesApiTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
 
         [Fact]
-        public void TestAddFoodItem() {
+        public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetAllFoodItems());
 
             var testItem = new Item() {
+                ItemId = 7,
                 Name = "CoolPeanuts",
                 Amount = 3,
                 Unit = 0,
@@ -20,6 +21,10 @@ namespace CarefulBitesApiTests {
             _manager.PostFoodItem(testItem);
 
             Assert.NotEmpty(_manager.GetAllFoodItems());
+
+            _manager.DeleteFoodItem(7);
+
+            Assert.Empty(_manager.GetAllFoodItems());
         }
     }
 }

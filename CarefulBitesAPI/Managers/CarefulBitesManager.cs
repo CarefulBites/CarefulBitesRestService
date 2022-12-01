@@ -27,8 +27,6 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public Item? PostFoodItem(Item foodItem) {
-            foodItem.ItemId = null;
-
             var newItem = _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();

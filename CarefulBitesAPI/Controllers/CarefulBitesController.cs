@@ -47,6 +47,8 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
         public ActionResult PostFoodItem([FromBody] Item foodItem) {
+            foodItem.ItemId = null;
+
             var createdItem = _manager.PostFoodItem(foodItem);
             if (createdItem != null)
                 return Created(new Uri(baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
