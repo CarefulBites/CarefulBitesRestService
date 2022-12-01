@@ -22,14 +22,17 @@ namespace CarefulBitesAPI.Managers {
             return foodItemList;
         }
 
-        public Item PostFoodItem(Item foodItem) {
+        public Item? PostFoodItem(Item foodItem) {
             foodItem.ItemId = null;
 
             var newItem = _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();
 
-            return (newItem.Entity);
+            if (newItem != null)
+                return newItem.Entity;
+
+            return null;
         }
 
         public void PutFoodItem(int itemId, Item foodItem) {
