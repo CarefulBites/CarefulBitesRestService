@@ -86,8 +86,11 @@ namespace CarefulBitesAPI.Managers {
             return newUser;
         }
 
-        public IEnumerable<User> GetAllUsers() {
+        public IEnumerable<User> GetUsers(string? username) {
             List<User> userList = _dbContext.Users.ToList();
+
+            if (username != null)
+                userList = userList.FindAll(u => u.Username.Equals(username));
 
             return userList;
         }
@@ -101,13 +104,6 @@ namespace CarefulBitesAPI.Managers {
                 return (null, ClientError.Conflict);
 
             var newUser = _dbContext.Users.Add(user);
-
-            //try {
-            //    _dbContext.SaveChanges();
-            //} catch (DbUpdateException e) {
-            //    Console.WriteLine(e);
-            //    return null;
-            //}
 
             return (newUser.Entity, null);
         }

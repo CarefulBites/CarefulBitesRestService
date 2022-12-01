@@ -72,9 +72,9 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("users", Name = "GetAllUsers")]
-        public ActionResult<IEnumerable<User>> GetAllUsers() {
-            var users = _manager.GetAllUsers();
+        [HttpGet("users", Name = "GetUsers")]
+        public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
+            var users = _manager.GetUsers(username);
 
             if (users.Any())
                 return Ok(users);
