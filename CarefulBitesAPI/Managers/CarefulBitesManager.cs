@@ -1,23 +1,28 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarefulBitesAPI.Managers {
-    public static class CarefulBitesManager {
-        private static CarefulBitesDbContext _dbContext = new CarefulBitesDbContext();
+    public class CarefulBitesManager {
+        private ICarefulBitesDbContext _dbContext;
 
-        public static Item? GetFoodItem(int itemId) {
+        public CarefulBitesManager(ICarefulBitesDbContext dbContext) {
+            _dbContext = dbContext;
+        }
+
+        public Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             return item;
         }
 
-        public static IEnumerable<Item> GetAllFoodItems() {
+        public IEnumerable<Item> GetAllFoodItems() {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             return foodItemList;
         }
 
-        public static Item PostFoodItem(Item foodItem) {
+        public Item PostFoodItem(Item foodItem) {
             foodItem.ItemId = null;
 
             var newItem = _dbContext.Items.Add(foodItem);
@@ -27,7 +32,7 @@ namespace CarefulBitesAPI.Managers {
             return (newItem.Entity);
         }
 
-        public static void PutFoodItem(int itemId, Item foodItem) {
+        public void PutFoodItem(int itemId, Item foodItem) {
             var oldItem = _dbContext.Items.Find(itemId);
 
             if (oldItem != null) {
@@ -44,7 +49,7 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
+        public void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
             var item = _dbContext.Items.Find(itemId);
 
             if (item != null)
@@ -53,7 +58,7 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
-        public static void DeleteFoodItem(int itemId) {
+        public void DeleteFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             if (item != null) {
@@ -62,19 +67,19 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static User? GetUser(int userId) {
+        public User? GetUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
             return user;
         }
 
-        public static IEnumerable<User> GetAllUsers() {
+        public IEnumerable<User> GetAllUsers() {
             List<User> userList = _dbContext.Users.ToList();
 
             return userList;
         }
 
-        public static User PostUser(User user) {
+        public User PostUser(User user) {
             user.UserId = null;
 
             var newUser = _dbContext.Users.Add(user);
@@ -84,7 +89,7 @@ namespace CarefulBitesAPI.Managers {
             return (newUser.Entity);
         }
 
-        public static void PutUser(int userId, User user) {
+        public void PutUser(int userId, User user) {
             var oldUser = _dbContext.Users.Find(userId);
 
             if (oldUser != null) {
@@ -95,7 +100,7 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static void PatchUser(int userId, JsonPatchDocument<User> value) {
+        public void PatchUser(int userId, JsonPatchDocument<User> value) {
             var user = _dbContext.Users.Find(userId);
 
             if (user != null)
@@ -104,7 +109,7 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
-        public static void DeleteUser(int userId) {
+        public void DeleteUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
             if (user != null) {
@@ -113,19 +118,19 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public static IEnumerable<ItemStorage> GetAllItemStorages() {
+        public IEnumerable<ItemStorage> GetAllItemStorages() {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
             return itemStorageList;
         }
 
-        public static ItemStorage? GetItemStorage(int itemStorageId) {
+        public ItemStorage? GetItemStorage(int itemStorageId) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
             return itemStorage;
         }
 
-        public static ItemStorage PostItemStorage(ItemStorage itemStorage) {
+        public ItemStorage PostItemStorage(ItemStorage itemStorage) {
             itemStorage.ItemStorageId = null;
 
             var newItemStorage = _dbContext.ItemStorages.Add(itemStorage);
@@ -135,19 +140,18 @@ namespace CarefulBitesAPI.Managers {
             return newItemStorage.Entity;
         }
 
-        public static void PutItemStorage(int itemStorageId, ItemStorage itemStorage) {
+        public void PutItemStorage(int itemStorageId, ItemStorage itemStorage) {
             var oldItemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
             if (oldItemStorage != null) {
                 oldItemStorage.Name = itemStorage.Name;
-                //oldItemStorage.User = itemStorage.User;
                 oldItemStorage.UserId = itemStorage.UserId;
 
                 _dbContext.SaveChanges();
             }
         }
 
-        public static void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
+        public void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
             if (itemStorage != null)
@@ -156,7 +160,7 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
-        public static void DeleteItemStorage(int itemStorageId) {
+        public void DeleteItemStorage(int itemStorageId) {
             var itemStorage = _dbContext.Users.Find(itemStorageId);
 
             if (itemStorage != null) {

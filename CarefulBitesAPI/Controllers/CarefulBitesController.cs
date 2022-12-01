@@ -19,6 +19,7 @@ namespace CarefulBitesAPI.Controllers {
 #endif
 
         private readonly ILogger<CarefulBitesController> _logger;
+        private CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
 
         public CarefulBitesController(ILogger<CarefulBitesController> logger) {
             _logger = logger;
@@ -26,7 +27,7 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpGet("foodItems", Name = "GetAllFoodItems")]
         public ActionResult<IEnumerable<Item>> GetAllFoodItems() {
-            var items = CarefulBitesManager.GetAllFoodItems();
+            var items = _manager.GetAllFoodItems();
 
             if (items.Any())
                 return Ok(items);
@@ -36,41 +37,41 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItem")]
         public ActionResult<Item> GetFoodItem(int itemId) {
-            var item = CarefulBitesManager.GetFoodItem(itemId);
+            var item = _manager.GetFoodItem(itemId);
 
             if (item != null)
-                return Ok(CarefulBitesManager.GetFoodItem(itemId));
+                return Ok(_manager.GetFoodItem(itemId));
 
             return NotFound();
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
         public ActionResult PostFoodItem([FromBody] Item foodItem) {
-            var createdItem = CarefulBitesManager.PostFoodItem(foodItem);
+            var createdItem = _manager.PostFoodItem(foodItem);
             return Created(new Uri(baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
         }
 
         [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]
         public ActionResult PutFoodItem(int itemId, [FromBody] Item foodItem) {
-            CarefulBitesManager.PutFoodItem(itemId, foodItem);
+            _manager.PutFoodItem(itemId, foodItem);
             return NoContent();
         }
 
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
         public ActionResult PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
-            CarefulBitesManager.PatchFoodItem(itemId, value);
+            _manager.PatchFoodItem(itemId, value);
             return NoContent();
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
-            CarefulBitesManager.DeleteFoodItem(itemId);
+            _manager.DeleteFoodItem(itemId);
             return NoContent();
         }
 
         [HttpGet("users", Name = "GetAllUsers")]
         public ActionResult<IEnumerable<User>> GetAllUsers() {
-            var users = CarefulBitesManager.GetAllUsers();
+            var users = _manager.GetAllUsers();
 
             if (users.Any())
                 return Ok(users);
@@ -78,9 +79,9 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("users", Name = "GetUser")]
+        [HttpGet("users/{userId}", Name = "GetUser")]
         public ActionResult<User> GetUser(int userId) {
-            var user = CarefulBitesManager.GetUser(userId);
+            var user = _manager.GetUser(userId);
 
             if (user != null)
                 return Ok(user);
@@ -90,31 +91,31 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("users", Name = "PostUser")]
         public ActionResult PostUser([FromBody] User user) {
-            var createdUser = CarefulBitesManager.PostUser(user);
+            var createdUser = _manager.PostUser(user);
             return Created(new Uri(baseUri, $"users/{user.UserId}"), createdUser);
         }
 
         [HttpPut("users/{userId}", Name = "PutUser")]
         public ActionResult PutUser(int userId, [FromBody] User user) {
-            CarefulBitesManager.PutUser(userId, user);
+            _manager.PutUser(userId, user);
             return NoContent();
         }
 
         [HttpPatch("users/{userId}", Name = "PatchUser")]
         public ActionResult PatchUser(int userId, [FromBody] JsonPatchDocument<User> value) {
-            CarefulBitesManager.PatchUser(userId, value);
+            _manager.PatchUser(userId, value);
             return NoContent();
         }
 
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public ActionResult DeleteUser(int userId) {
-            CarefulBitesManager.DeleteUser(userId);
+            _manager.DeleteUser(userId);
             return NoContent();
         }
 
         [HttpGet("itemStorages", Name = "GetAllItemStorages")]
         public ActionResult<IEnumerable<ItemStorage>> GetAllItemStorages() {
-            var itemStorages = CarefulBitesManager.GetAllItemStorages();
+            var itemStorages = _manager.GetAllItemStorages();
 
             if (itemStorages.Any())
                 return Ok(itemStorages);
@@ -122,9 +123,9 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("itemStorages", Name = "GetItemStorage")]
+        [HttpGet("itemStorages/{itemStorageId}", Name = "GetItemStorage")]
         public ActionResult<ItemStorage> GetItemStorage(int itemStorageId) {
-            var itemStorage = CarefulBitesManager.GetItemStorage(itemStorageId);
+            var itemStorage = _manager.GetItemStorage(itemStorageId);
 
             if (itemStorage != null)
                 return Ok(itemStorage);
@@ -134,25 +135,25 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]
         public ActionResult PostItemStorages([FromBody] ItemStorage itemStorage) {
-            var createdItemStorage = CarefulBitesManager.PostItemStorage(itemStorage);
+            var createdItemStorage = _manager.PostItemStorage(itemStorage);
             return Created(new Uri(baseUri, $"itemStorages/{itemStorage.ItemStorageId}"), createdItemStorage);
         }
 
         [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]
         public ActionResult PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
-            CarefulBitesManager.PutItemStorage(itemStorageId, itemStorage);
+            _manager.PutItemStorage(itemStorageId, itemStorage);
             return NoContent();
         }
 
         [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]
         public ActionResult PatchItemStorage(int itemStorageId, [FromBody] JsonPatchDocument<ItemStorage> value) {
-            CarefulBitesManager.PatchItemStorage(itemStorageId, value);
+            _manager.PatchItemStorage(itemStorageId, value);
             return NoContent();
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
         public ActionResult DeleteItemStorage(int itemStorageId) {
-            CarefulBitesManager.DeleteItemStorage(itemStorageId);
+            _manager.DeleteItemStorage(itemStorageId);
             return NoContent();
         }
     }
