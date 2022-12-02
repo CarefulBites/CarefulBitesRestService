@@ -35,7 +35,7 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("foodItems/{itemId}", Name = "GetFoodItem")]
+        [HttpGet("foodItems/{itemId}", Name = "GetFoodItemById")]
         public ActionResult<Item> GetFoodItem(int itemId) {
             var item = _manager.GetFoodItem(itemId);
 
@@ -78,9 +78,9 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("users/{userId}", Name = "GetUserByUserId")]
-        public ActionResult<User> GetUserByUserId(int userId) {
-            var user = _manager.GetUserByUserId(userId);
+        [HttpGet("users/{userId}", Name = "GetUserById")]
+        public ActionResult<User> GetUser(int userId) {
+            var user = _manager.GetUser(userId);
 
             if (user != null)
                 return Ok(user);
@@ -126,7 +126,7 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("itemStorages/{itemStorageId}", Name = "GetItemStorage")]
+        [HttpGet("itemStorages/{itemStorageId}", Name = "GetItemStorageById")]
         public ActionResult<ItemStorage> GetItemStorage(int itemStorageId) {
             var itemStorage = _manager.GetItemStorage(itemStorageId);
 
