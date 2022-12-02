@@ -1,8 +1,8 @@
 using CarefulBitesAPI;
 using CarefulBitesAPI.Managers;
 
-namespace CarefulBitesApiTests {
-    public class FoodItemTests {
+namespace CarefulBitesAPITests {
+    public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
 
         [Fact]
@@ -25,6 +25,25 @@ namespace CarefulBitesApiTests {
             _manager.DeleteFoodItem(7);
 
             Assert.Empty(_manager.GetAllFoodItems());
+        }
+
+        [Fact]
+        public void TestPostUserAndDeleteUser() {
+            Assert.Empty(_manager.GetUsers());
+
+            var testUser = new User() {
+                UserId = 7,
+                Username = "Barry",
+                Password = "1234",
+            };
+
+            _manager.PostUser(testUser);
+
+            Assert.NotEmpty(_manager.GetUsers());
+
+            _manager.DeleteUser(7);
+
+            Assert.Empty(_manager.GetUsers());
         }
     }
 }

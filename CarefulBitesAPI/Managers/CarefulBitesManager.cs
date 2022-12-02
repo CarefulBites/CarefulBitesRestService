@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarefulBitesAPI.Managers {
     public enum ClientError {
-        Conflict
+        Conflict,
+        Other
     }
 
     public class CarefulBitesManager {
@@ -37,23 +38,6 @@ namespace CarefulBitesAPI.Managers {
             return null;
         }
 
-        public void PutFoodItem(int itemId, Item foodItem) {
-            var oldItem = _dbContext.Items.Find(itemId);
-
-            if (oldItem != null) {
-                oldItem.Amount = foodItem.Amount;
-                oldItem.CaloriesPer = foodItem.CaloriesPer;
-                oldItem.DaysAfterOpen = foodItem.DaysAfterOpen;
-                oldItem.ExpirationDate = foodItem.ExpirationDate;
-                oldItem.Name = foodItem.Name;
-                oldItem.ItemStorageId = foodItem.ItemStorageId;
-                oldItem.OpenDate = foodItem.OpenDate;
-                oldItem.Unit = foodItem.Unit;
-
-                _dbContext.SaveChanges();
-            }
-        }
-
         public void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
             var item = _dbContext.Items.Find(itemId);
 
@@ -78,13 +62,7 @@ namespace CarefulBitesAPI.Managers {
             return user;
         }
 
-        public User? GetUserByUsername(string username) {
-            var newUser = _dbContext.Users.ToList().Find(u => u.Username == username);
-
-            return newUser;
-        }
-
-        public IEnumerable<User> GetUsers(string? username) {
+        public IEnumerable<User> GetUsers(string? username = null) {
             List<User> userList = _dbContext.Users.ToList();
 
             if (username != null)
@@ -94,8 +72,6 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public (User? user, ClientError? error) PostUser(User user) {
-            user.UserId = null;
-
             var userWithSameName = _dbContext.Users.ToList().Exists(u => u.Username.Equals(user.Username));
 
             if (userWithSameName)
@@ -103,18 +79,10 @@ namespace CarefulBitesAPI.Managers {
 
             var newUser = _dbContext.Users.Add(user);
 
-            return (newUser.Entity, null);
-        }
+            if (newUser != null)
+                return (newUser.Entity, null);
 
-        public void PutUser(int userId, User user) {
-            var oldUser = _dbContext.Users.Find(userId);
-
-            if (oldUser != null) {
-                oldUser.Username = user.Username;
-                oldUser.Password = user.Password;
-
-                _dbContext.SaveChanges();
-            }
+            return (null, ClientError.Other);
         }
 
         public void PatchUser(int userId, JsonPatchDocument<User> value) {
@@ -148,24 +116,11 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public ItemStorage PostItemStorage(ItemStorage itemStorage) {
-            itemStorage.ItemStorageId = null;
-
             var newItemStorage = _dbContext.ItemStorages.Add(itemStorage);
 
             _dbContext.SaveChanges();
 
             return newItemStorage.Entity;
-        }
-
-        public void PutItemStorage(int itemStorageId, ItemStorage itemStorage) {
-            var oldItemStorage = _dbContext.ItemStorages.Find(itemStorageId);
-
-            if (oldItemStorage != null) {
-                oldItemStorage.Name = itemStorage.Name;
-                oldItemStorage.UserId = itemStorage.UserId;
-
-                _dbContext.SaveChanges();
-            }
         }
 
         public void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {

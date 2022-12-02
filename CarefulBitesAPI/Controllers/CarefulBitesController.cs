@@ -56,12 +56,6 @@ namespace CarefulBitesAPI.Controllers {
             throw new SystemException("Posted Food Item is null.");
         }
 
-        [HttpPut("foodItems/{itemId}", Name = "PutFoodItem")]
-        public ActionResult PutFoodItem(int itemId, [FromBody] Item foodItem) {
-            _manager.PutFoodItem(itemId, foodItem);
-            return NoContent();
-        }
-
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
         public ActionResult PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
             _manager.PatchFoodItem(itemId, value);
@@ -94,18 +88,10 @@ namespace CarefulBitesAPI.Controllers {
             return NotFound();
         }
 
-        [HttpGet("users/byUsername/{username}", Name = "GetUserByUsername")]
-        public ActionResult<User> GetUserByUsername(string username) {
-            var user = _manager.GetUserByUsername(username);
-
-            if (user != null)
-                return Ok(user);
-
-            return NotFound();
-        }
-
         [HttpPost("users", Name = "PostUser")]
         public ActionResult PostUser([FromBody] User user) {
+            user.UserId = null;
+
             var createdUser = _manager.PostUser(user);
 
             switch (createdUser.error) {
@@ -116,12 +102,6 @@ namespace CarefulBitesAPI.Controllers {
                 default:
                     return BadRequest();
             }
-        }
-
-        [HttpPut("users/{userId}", Name = "PutUser")]
-        public ActionResult PutUser(int userId, [FromBody] User user) {
-            _manager.PutUser(userId, user);
-            return NoContent();
         }
 
         [HttpPatch("users/{userId}", Name = "PatchUser")]
@@ -158,14 +138,10 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPost("itemStorages", Name = "PostItemStorage")]
         public ActionResult PostItemStorages([FromBody] ItemStorage itemStorage) {
+            itemStorage.ItemStorageId = null;
+
             var createdItemStorage = _manager.PostItemStorage(itemStorage);
             return Created(new Uri(baseUri, $"itemStorages/{itemStorage.ItemStorageId}"), createdItemStorage);
-        }
-
-        [HttpPut("itemStorages/{itemStorageId}", Name = "PutItemStorage")]
-        public ActionResult PutItemStorage(int itemStorageId, [FromBody] ItemStorage itemStorage) {
-            _manager.PutItemStorage(itemStorageId, itemStorage);
-            return NoContent();
         }
 
         [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]
