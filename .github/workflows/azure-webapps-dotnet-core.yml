@@ -62,10 +62,9 @@ jobs:
         run: npm install -g newman
       
       - name: Run the API and Postman tests
-        run: |
-          dotnet run --configuration Release &
-          sleep 60
-          newman run "Example.postman_collection.json"
+        run: dotnet run &
+             sleep 60
+             newman run "Example.postman_collection.json"
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
