@@ -52,9 +52,9 @@
 					"raw": "https://localhost:7116/CarefulBites/foodItems",
 					"protocol": "https",
 					"host": [
-						"localhost",
-						"net"
+						"localhost"
 					],
+					"port": "7116",
 					"path": [
 						"CarefulBites",
 						"foodItems"
