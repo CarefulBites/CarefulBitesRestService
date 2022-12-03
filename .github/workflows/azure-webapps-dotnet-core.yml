@@ -23,10 +23,6 @@ env:
   AZURE_WEBAPP_NAME: CarefulBitesAPI20221128134821    # set this to the name of your Azure Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.403'                 # set this to the .NET Core version to use
-  MONGO_URI: "mongodb://127.0.0.1:27017/test-db"
-  PORT: "3000"
-  STAGE: "local"
-  NODE_ENV: "develop"
 
 on:
   push:
@@ -39,11 +35,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-        mongodb-version: [4.2]
-
+    
     steps:
       - uses: actions/checkout@v3
 
@@ -66,29 +58,12 @@ jobs:
       - name: Run unit tests
         run: dotnet test
         
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
-          
-      - name: Start MongoDB ${{ matrix.mongodb-version }}
-        uses: supercharge/mongodb-github-action@1.3.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-      
-      - name: Install dependencies
-        run: npm install
-        
       - name: Install newman
         run: npm install -g newman
       
-      - name: Seed mongo
-        run: mongo 127.0.0.1/infinite-digital-postman-tests  test/postman/setup.js
-      
       - name: Run the API and Postman tests
         run: |
-          npm run start:dev &
+          dotnet run &
           sleep 60
           newman run "Example.postman_collection.json"
 
