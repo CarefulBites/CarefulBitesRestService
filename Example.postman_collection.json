@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/foodItems",
+			"name": "https://localhost:7116/CarefulBites/foodItems",
 			"event": [
 				{
 					"listen": "test",
@@ -49,11 +49,10 @@
 					"raw": "{\r\n\"name\": \"NewestAppelsiner2\",\r\n\"caloriesPer\": 20,\r\n\"expirationDate\": \"2022-11-28T12:22:38.613\",\r\n\"itemStorageId\": 2,\r\n\"amount\": 30,\r\n\"unit\": 0,\r\n\"openDate\": null,\r\n\"daysAfterOpen\": null\r\n}"
 				},
 				"url": {
-					"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/foodItems",
+					"raw": "https://localhost:7116/CarefulBites/foodItems",
 					"protocol": "https",
 					"host": [
-						"carefulbitesapi20221128134821",
-						"azurewebsites",
+						"localhost",
 						"net"
 					],
 					"path": [
