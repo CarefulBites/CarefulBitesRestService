@@ -63,7 +63,7 @@ jobs:
       
       - name: Run the API and Postman tests
         run: |
-             ${{env.DOTNET_ROOT}}/myapp &
+             dotnet run &
              sleep 60
              newman run "Example.postman_collection.json"
 
