@@ -64,7 +64,7 @@ jobs:
       - name: Run the API and Postman tests
         run: |
              dotnet run --project "./CarefulBitesAPI" &
-             sleep 60
+             sleep 30
              newman run "Example.postman_collection.json"
 
       - name: dotnet publish
