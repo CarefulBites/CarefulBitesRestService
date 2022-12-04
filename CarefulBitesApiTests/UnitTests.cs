@@ -57,7 +57,7 @@ namespace CarefulBitesAPITests {
 
             _manager.PatchFoodItem(7, jsonPatch);
 
-            Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7).Name);
+            Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7)?.Name);
         }
 
 

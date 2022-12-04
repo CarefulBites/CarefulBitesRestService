@@ -1,10 +1,6 @@
 using CarefulBitesAPI.Managers;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
-using static Azure.Core.HttpHeader;
-using System.Runtime.Serialization;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
@@ -12,18 +8,13 @@ namespace CarefulBitesAPI.Controllers {
     public class CarefulBitesController : ControllerBase {
 
 #if DEBUG
-        private Uri baseUri = new Uri("https://localhost:7116/CarefulBites/");
+        private readonly Uri _baseUri = new Uri("https://localhost:7116/CarefulBites/");
 #endif
 #if RELEASE
-        private Uri baseUri = new Uri("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
+        private readonly Uri _baseUri = new Uri("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
 #endif
 
-        private readonly ILogger<CarefulBitesController> _logger;
-        private CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
-
-        public CarefulBitesController(ILogger<CarefulBitesController> logger) {
-            _logger = logger;
-        }
+        private readonly CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
 
         [HttpGet("foodItems", Name = "GetAllFoodItems")]
         public ActionResult<IEnumerable<Item>> GetAllFoodItems() {
@@ -50,10 +41,8 @@ namespace CarefulBitesAPI.Controllers {
             foodItem.ItemId = null;
 
             var createdItem = _manager.PostFoodItem(foodItem);
-            if (createdItem != null)
-                return Created(new Uri(baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
 
-            throw new SystemException("Posted Food Item is null.");
+            return Created(new Uri(_baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
         }
 
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
@@ -96,7 +85,7 @@ namespace CarefulBitesAPI.Controllers {
 
             switch (createdUser.error) {
                 case null:
-                    return Created(new Uri(baseUri, $"users/{user.UserId}"), createdUser);
+                    return Created(new Uri(_baseUri, $"users/{user.UserId}"), createdUser);
                 case ClientError.Conflict:
                     return Conflict();
                 default:
@@ -141,7 +130,7 @@ namespace CarefulBitesAPI.Controllers {
             itemStorage.ItemStorageId = null;
 
             var createdItemStorage = _manager.PostItemStorage(itemStorage);
-            return Created(new Uri(baseUri, $"itemStorages/{itemStorage.ItemStorageId}"), createdItemStorage);
+            return Created(new Uri(_baseUri, $"itemStorages/{itemStorage.ItemStorageId}"), createdItemStorage);
         }
 
         [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]

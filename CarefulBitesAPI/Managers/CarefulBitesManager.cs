@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarefulBitesAPI.Managers {
     public enum ClientError {
@@ -27,15 +25,12 @@ namespace CarefulBitesAPI.Managers {
             return foodItemList;
         }
 
-        public Item? PostFoodItem(Item foodItem) {
+        public Item PostFoodItem(Item foodItem) {
             var newItem = _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();
 
-            if (newItem != null)
-                return newItem.Entity;
-
-            return null;
+            return newItem.Entity;
         }
 
         public void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
@@ -79,10 +74,9 @@ namespace CarefulBitesAPI.Managers {
 
             var newUser = _dbContext.Users.Add(user);
 
-            if (newUser != null)
-                return (newUser.Entity, null);
+            _dbContext.SaveChanges();
 
-            return (null, ClientError.Other);
+            return (newUser.Entity, null);
         }
 
         public void PatchUser(int userId, JsonPatchDocument<User> value) {
