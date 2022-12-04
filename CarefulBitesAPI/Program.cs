@@ -1,4 +1,4 @@
-using JsonPatchSample;
+using CarefulBitesAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers(options => {
-    options.InputFormatters.Insert(0, MyJPIF.GetJsonPatchInputFormatter());
+    options.InputFormatters.Insert(0, MyJpif.GetJsonPatchInputFormatter());
 });
 
 var app = builder.Build();

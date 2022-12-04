@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 
-namespace JsonPatchSample;
+namespace CarefulBitesAPI;
 
-public static class MyJPIF {
+public static class MyJpif {
     public static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() {
         var builder = new ServiceCollection()
             .AddLogging()

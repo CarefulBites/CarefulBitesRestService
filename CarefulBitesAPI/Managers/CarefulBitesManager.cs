@@ -7,7 +7,7 @@ namespace CarefulBitesAPI.Managers {
     }
 
     public class CarefulBitesManager {
-        private ICarefulBitesDbContext _dbContext;
+        private readonly ICarefulBitesDbContext _dbContext;
 
         public CarefulBitesManager(ICarefulBitesDbContext dbContext) {
             _dbContext = dbContext;
