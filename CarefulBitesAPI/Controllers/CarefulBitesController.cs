@@ -105,9 +105,9 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("itemStorages", Name = "GetAllItemStorages")]
-        public ActionResult<IEnumerable<ItemStorage>> GetAllItemStorages() {
-            var itemStorages = _manager.GetAllItemStorages();
+        [HttpGet("itemStorages", Name = "GetItemStorages")]
+        public ActionResult<IEnumerable<ItemStorage>> GetItemStorages([FromQuery] int? userId = null) {
+            var itemStorages = _manager.GetItemStorages(userId);
 
             if (itemStorages.Any())
                 return Ok(itemStorages);

@@ -97,8 +97,11 @@ namespace CarefulBitesAPI.Managers {
             }
         }
 
-        public IEnumerable<ItemStorage> GetAllItemStorages() {
+        public IEnumerable<ItemStorage> GetItemStorages(int? userId = null) {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
+
+            if (userId != null)
+                itemStorageList = itemStorageList.FindAll(iS => iS.UserId.Equals(userId));
 
             return itemStorageList;
         }
