@@ -25,12 +25,12 @@ namespace CarefulBitesAPI.Managers {
             return foodItemList;
         }
 
-        public Item PostFoodItem(Item foodItem) {
+        public Item? PostFoodItem(Item foodItem) {
             var newItem = _dbContext.Items.Add(foodItem);
 
             _dbContext.SaveChanges();
 
-            return newItem.Entity;
+            return newItem?.Entity;
         }
 
         public void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
@@ -76,7 +76,7 @@ namespace CarefulBitesAPI.Managers {
 
             _dbContext.SaveChanges();
 
-            return (newUser.Entity, null);
+            return (newUser?.Entity, null);
         }
 
         public void PatchUser(int userId, JsonPatchDocument<User> value) {
@@ -109,12 +109,12 @@ namespace CarefulBitesAPI.Managers {
             return itemStorage;
         }
 
-        public ItemStorage PostItemStorage(ItemStorage itemStorage) {
+        public ItemStorage? PostItemStorage(ItemStorage itemStorage) {
             var newItemStorage = _dbContext.ItemStorages.Add(itemStorage);
 
             _dbContext.SaveChanges();
 
-            return newItemStorage.Entity;
+            return newItemStorage?.Entity;
         }
 
         public void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
