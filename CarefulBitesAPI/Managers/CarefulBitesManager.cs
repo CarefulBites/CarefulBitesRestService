@@ -37,13 +37,17 @@ namespace CarefulBitesAPI.Managers {
             return newItem?.Entity;
         }
 
-        public void PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
+        public ClientError? PatchFoodItem(int itemId, JsonPatchDocument<Item> value) {
             var item = _dbContext.Items.Find(itemId);
 
-            if (item != null)
+            if (item != null) {
                 value.ApplyTo(item);
+                _dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
+                return null;
+            }
+
+            return ClientError.NotFound;
         }
 
         public ClientError? DeleteFoodItem(int itemId) {
