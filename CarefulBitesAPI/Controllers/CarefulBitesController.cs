@@ -16,9 +16,9 @@ namespace CarefulBitesAPI.Controllers {
 
         private readonly CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
 
-        [HttpGet("foodItems", Name = "GetAllFoodItems")]
-        public ActionResult<IEnumerable<Item>> GetAllFoodItems() {
-            var items = _manager.GetAllFoodItems();
+        [HttpGet("foodItems", Name = "GetFoodItems")]
+        public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
+            var items = _manager.GetFoodItems(itemStorageId);
 
             if (items.Any())
                 return Ok(items);
@@ -42,7 +42,10 @@ namespace CarefulBitesAPI.Controllers {
 
             var createdItem = _manager.PostFoodItem(foodItem);
 
-            return Created(new Uri(_baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
+            if (createdItem != null)
+                return Created(new Uri(_baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
+
+            return BadRequest();
         }
 
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
