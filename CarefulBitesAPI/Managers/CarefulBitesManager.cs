@@ -12,7 +12,7 @@ namespace CarefulBitesAPI.Managers {
         public CarefulBitesManager(ICarefulBitesDbContext dbContext) {
             _dbContext = dbContext;
         }
-
+        #region FoodItem
         public Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
@@ -53,7 +53,9 @@ namespace CarefulBitesAPI.Managers {
                 _dbContext.SaveChanges();
             }
         }
+        #endregion
 
+        #region User
         public User? GetUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
@@ -99,7 +101,9 @@ namespace CarefulBitesAPI.Managers {
                 _dbContext.SaveChanges();
             }
         }
+        #endregion
 
+        #region ItemStorage
         public IEnumerable<ItemStorage> GetItemStorages(int? userId = null) {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
@@ -140,5 +144,10 @@ namespace CarefulBitesAPI.Managers {
                 _dbContext.SaveChanges();
             }
         }
+        #endregion
+
+        #region Recipes
+        #endregion
+
     }
 }
