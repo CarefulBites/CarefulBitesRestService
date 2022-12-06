@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
-
+        #region Fooditems
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems());
@@ -59,8 +59,9 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7)?.Name);
         }
+        #endregion
 
-
+        #region Users
         [Fact]
         public void TestPostUserAndDeleteUser() {
             Assert.Empty(_manager.GetUsers());
@@ -83,5 +84,33 @@ namespace CarefulBitesAPITests {
 
             Assert.Empty(_manager.GetUsers());
         }
+
+        [Fact]
+        public void TestPostUserAndPatchUser()
+        {
+            Assert.Empty(_manager.GetUsers());
+
+            var testUser = new User()
+            {
+                UserId = 7,
+                Username = "Barry",
+                Password = "1234",
+            };
+
+            _manager.PostUser(testUser);
+
+            Assert.NotEmpty(_manager.GetUsers());
+
+            Assert.Equal(testUser, _manager.GetUser(7));
+
+            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/Username", "", "Larry"), new Operation<User>("replace", "/Password", "", "12345") }, new DefaultContractResolver());
+
+            _manager.PatchUser(7, jsonPatch);
+
+            Assert.Equal("Larry", _manager.GetUser(7)?.Username);
+            Assert.Equal("12345", _manager.GetUser(7)?.Password);
+        }
+        #endregion
+
     }
 }
