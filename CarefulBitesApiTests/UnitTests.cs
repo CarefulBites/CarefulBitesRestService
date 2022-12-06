@@ -10,7 +10,7 @@ namespace CarefulBitesAPITests {
 
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
-            Assert.Empty(_manager.GetAllFoodItems());
+            Assert.Empty(_manager.GetFoodItems());
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -23,7 +23,7 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetAllFoodItems());
+            Assert.NotEmpty(_manager.GetFoodItems());
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -31,12 +31,12 @@ namespace CarefulBitesAPITests {
 
             Assert.Null(_manager.GetFoodItem(7));
 
-            Assert.Empty(_manager.GetAllFoodItems());
+            Assert.Empty(_manager.GetFoodItems());
         }
 
         [Fact]
         public void TestPostFoodItemAndPatchFoodItem() {
-            Assert.Empty(_manager.GetAllFoodItems());
+            Assert.Empty(_manager.GetFoodItems());
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -49,7 +49,7 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetAllFoodItems());
+            Assert.NotEmpty(_manager.GetFoodItems());
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
