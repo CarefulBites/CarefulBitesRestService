@@ -50,14 +50,30 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPatch("foodItems/{itemId}", Name = "PatchFoodItem")]
         public ActionResult PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
-            _manager.PatchFoodItem(itemId, value);
-            return NoContent();
+            var error = _manager.PatchFoodItem(itemId, value);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
-            _manager.DeleteFoodItem(itemId);
-            return NoContent();
+            var error = _manager.DeleteFoodItem(itemId);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpGet("users", Name = "GetUsers")]

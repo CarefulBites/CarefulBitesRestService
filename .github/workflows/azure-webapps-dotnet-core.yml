@@ -66,7 +66,7 @@ jobs:
         run: |
              dotnet run --project "./CarefulBitesAPI" &
              sleep 10
-             newman run "Example.postman_collection.json" --insecure
+             newman run "testSuite.postman_collection.json" --insecure
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp

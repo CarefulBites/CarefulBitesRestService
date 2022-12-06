@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "7ee418a1-546e-4ecf-9b97-2a9cb2d8b012",
+		"name": "testSuite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18242926"
+	},
+	"item": [
+		{
+			"name": "foodItems",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 201\", function(){\r",
+							"    pm.response.to.have.status(201)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is response item\", function(){\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eql(\"brandnewtest\");\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"brandnewtestId\", pm.response.json()[\"itemId\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"brandnewtest\",\r\n        \"caloriesPer\": null,\r\n        \"expirationDate\": \"2022-12-01T00:00:00\",\r\n        \"itemStorageId\": 2,\r\n        \"amount\": 4200,\r\n        \"unit\": 1,\r\n        \"openDate\": \"2022-12-04T00:00:00\",\r\n        \"daysAfterOpen\": 5\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test get all foodItems",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 200\", function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is response array\", function(){\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(pm.response.json()).to.be.an(\"array\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJuYmYiOjE2NDUxMDA1NjYsImV4cCI6MTY0NTcwNTM2NiwiaWF0IjoxNjQ1MTAwNTY2fQ.Qm5_59yWlej2iIaEBHdQ-6gPZ9toxsu_Fx9eqzD-DPY",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"NewestAppelsiner2\",\r\n\"caloriesPer\": 20,\r\n\"expirationDate\": \"2022-11-28T12:22:38.613\",\r\n\"itemStorageId\": 2,\r\n\"amount\": 30,\r\n\"unit\": 0,\r\n\"openDate\": null,\r\n\"daysAfterOpen\": null\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test get \"brandnewtest\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 200\", function(){\r",
+							"    pm.response.to.have.status(200)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Is response item\", function(){\r",
+							"    pm.expect(pm.response.json()[\"name\"]).to.eql(\"brandnewtest\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/{{brandnewtestId}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"{{brandnewtestId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test patch \"brandnewtest\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 204\", function(){\r",
+							"    pm.response.to.have.status(204)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n{ \"op\": \"replace\", \"path\": \"/amount\", \"value\": \"420000\" }\r\n]"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/{{brandnewtestId}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"{{brandnewtestId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test patch nonexisting id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 404\", function(){\r",
+							"    pm.response.to.have.status(404)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n{ \"op\": \"replace\", \"path\": \"/name\", \"value\": \"Barry\" }\r\n]"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/-1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test patch with invalid JSONPatch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 400\", function(){\r",
+							"    pm.response.to.have.status(400)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"contractResolver\": {}\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/0",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test patch without ItemId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 405\", function(){\r",
+							"    pm.response.to.have.status(405)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"contractResolver\": {}\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test delete nonexisting id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 404\", function(){\r",
+							"    pm.response.to.have.status(404)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/-1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test delete \"brandnewtest\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test is status code 204\", function(){\r",
+							"    pm.response.to.have.status(204)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:7116/CarefulBites/foodItems/{{brandnewtestId}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7116",
+					"path": [
+						"CarefulBites",
+						"foodItems",
+						"{{brandnewtestId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "brandnewtestId",
+			"value": "0"
+		},
+		{
+			"key": "brandnewtestId",
+			"value": ""
+		}
+	]
+}
