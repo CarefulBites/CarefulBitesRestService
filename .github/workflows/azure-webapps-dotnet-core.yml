@@ -69,7 +69,7 @@ jobs:
              newman run "testSuite.postman_collection.json" --insecure
 
       - name: dotnet publish
-        run: sudo dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
