@@ -3,6 +3,7 @@
 namespace CarefulBitesAPI.Managers {
     public enum ClientError {
         Conflict,
+        NotFound,
         Other
     }
 
@@ -21,7 +22,7 @@ namespace CarefulBitesAPI.Managers {
 
         public IEnumerable<Item> GetFoodItems(int? itemStorageId = null) {
             List<Item> foodItemList = _dbContext.Items.ToList();
-            
+
             if (itemStorageId != null)
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
 
@@ -45,13 +46,17 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
-        public void DeleteFoodItem(int itemId) {
+        public ClientError? DeleteFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             if (item != null) {
                 _dbContext.Items.Remove(item);
                 _dbContext.SaveChanges();
+
+                return null;
             }
+
+            return ClientError.NotFound;
         }
 
         public User? GetUser(int userId) {
