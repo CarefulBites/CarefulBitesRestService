@@ -101,7 +101,7 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal(testUser, _manager.GetUser(7));
 
-            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/Username", "", "Larry"), new Operation<User>("replace", "/Password", "", "12345") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/username", "", "Larry"), new Operation<User>("replace", "/password", "", "12345") }, new DefaultContractResolver());
 
             _manager.PatchUser(7, jsonPatch);
 
@@ -134,6 +134,29 @@ namespace CarefulBitesAPITests {
             Assert.Null(_manager.GetItemStorage(7));
 
             Assert.Empty(_manager.GetItemStorages());
+        }
+
+        [Fact]
+        public void TestPostItemStorageAndPatchItemStorage() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+
+            Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
+
+            var jsonPatch = new JsonPatchDocument<ItemStorage>(new List<Operation<ItemStorage>>() { new Operation<ItemStorage>("replace", "/name", "", "MyTummy") }, new DefaultContractResolver());
+
+            _manager.PatchItemStorage(7, jsonPatch);
+
+            Assert.Equal("MyTummy", _manager.GetItemStorage(7)?.Name);
         }
         #endregion
     }
