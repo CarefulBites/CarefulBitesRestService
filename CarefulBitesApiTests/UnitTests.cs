@@ -112,5 +112,47 @@ namespace CarefulBitesAPITests {
         }
         #endregion
 
+        #region ItemStorage
+        [Fact]
+        public void TestPostItemStorageAndDeleteItemStorage()
+        {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage()
+            {
+                ItemStorageId = 7,
+                Name = "Test Køleskab"
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+
+            Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
+
+            var testItem = new Item()
+            {
+                ItemId = 7,
+                Name = "CoolPeanuts",
+                Amount = 3,
+                Unit = 0,
+                CaloriesPer = 200,
+                ExpirationDate = new DateTime(2022, 12, 24),
+                ItemStorageId = 7
+            };
+
+            _manager.PostFoodItem(testItem);
+
+
+            _manager.DeleteItemStorage(7);
+
+            Assert.Null(_manager.GetItemStorage(7));
+
+            Assert.Empty(_manager.GetItemStorages());
+
+            _manager.GetFoodItem(7);
+        }
+        #endregion
+
     }
 }
