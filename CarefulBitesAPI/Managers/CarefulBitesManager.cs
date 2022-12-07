@@ -146,10 +146,10 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public void DeleteItemStorage(int itemStorageId) {
-            var itemStorage = _dbContext.Users.Find(itemStorageId);
+            var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
             if (itemStorage != null) {
-                _dbContext.Users.Remove(itemStorage);
+                _dbContext.ItemStorages.Remove(itemStorage);
                 _dbContext.SaveChanges();
             }
         }

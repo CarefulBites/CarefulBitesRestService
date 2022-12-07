@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
-        #region Fooditems
+        #region FoodItems
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems());
@@ -86,12 +86,10 @@ namespace CarefulBitesAPITests {
         }
 
         [Fact]
-        public void TestPostUserAndPatchUser()
-        {
+        public void TestPostUserAndPatchUser() {
             Assert.Empty(_manager.GetUsers());
 
-            var testUser = new User()
-            {
+            var testUser = new User() {
                 UserId = 7,
                 Username = "Barry",
                 Password = "1234",
@@ -112,5 +110,31 @@ namespace CarefulBitesAPITests {
         }
         #endregion
 
+        #region ItemStorages
+        [Fact]
+        public void TestPostItemStorageAndDeleteItemStorage() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+
+            Assert.Single(_manager.GetItemStorages());
+
+            Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
+
+            _manager.DeleteItemStorage(7);
+
+            Assert.Null(_manager.GetItemStorage(7));
+
+            Assert.Empty(_manager.GetItemStorages());
+        }
+        #endregion
     }
 }
