@@ -160,6 +160,5 @@ namespace CarefulBitesAPI.Managers {
 
         #region Recipes
         #endregion
-
     }
 }
