@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
-        #region Fooditems
+        #region FoodItems
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems());
@@ -86,12 +86,10 @@ namespace CarefulBitesAPITests {
         }
 
         [Fact]
-        public void TestPostUserAndPatchUser()
-        {
+        public void TestPostUserAndPatchUser() {
             Assert.Empty(_manager.GetUsers());
 
-            var testUser = new User()
-            {
+            var testUser = new User() {
                 UserId = 7,
                 Username = "Barry",
                 Password = "1234",
@@ -112,47 +110,31 @@ namespace CarefulBitesAPITests {
         }
         #endregion
 
-        #region ItemStorage
+        #region ItemStorages
         [Fact]
-        public void TestPostItemStorageAndDeleteItemStorage()
-        {
+        public void TestPostItemStorageAndDeleteItemStorage() {
             Assert.Empty(_manager.GetItemStorages());
 
-            var testItemStorage = new ItemStorage()
-            {
-                ItemStorageId = 7,
-                Name = "Test Køleskab"
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
             };
 
             _manager.PostItemStorage(testItemStorage);
 
             Assert.NotEmpty(_manager.GetItemStorages());
 
+            Assert.Single(_manager.GetItemStorages());
+
             Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
-
-            var testItem = new Item()
-            {
-                ItemId = 7,
-                Name = "CoolPeanuts",
-                Amount = 3,
-                Unit = 0,
-                CaloriesPer = 200,
-                ExpirationDate = new DateTime(2022, 12, 24),
-                ItemStorageId = 7
-            };
-
-            _manager.PostFoodItem(testItem);
-
 
             _manager.DeleteItemStorage(7);
 
             Assert.Null(_manager.GetItemStorage(7));
 
             Assert.Empty(_manager.GetItemStorages());
-
-            _manager.GetFoodItem(7);
         }
         #endregion
-
     }
 }

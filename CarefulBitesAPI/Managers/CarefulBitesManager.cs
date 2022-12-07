@@ -145,13 +145,16 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
 
-        public void DeleteItemStorage(int itemStorageId) {
-            var itemStorage = _dbContext.Users.Find(itemStorageId);
+        public ClientError? DeleteItemStorage(int itemStorageId) {
+            var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
+            if (itemStorage == null)
+                return ClientError.NotFound;
+            if (GetFoodItems(itemStorageId).ToList().Count == 0)
+                return ClientError.Conflict;
 
-            if (itemStorage != null) {
-                _dbContext.Users.Remove(itemStorage);
-                _dbContext.SaveChanges();
-            }
+            _dbContext.ItemStorages.Remove(itemStorage);
+            _dbContext.SaveChanges();
+            return null;
         }
         #endregion
 
