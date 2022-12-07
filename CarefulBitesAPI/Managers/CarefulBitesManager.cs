@@ -149,7 +149,7 @@ namespace CarefulBitesAPI.Managers {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
             if (itemStorage == null)
                 return ClientError.NotFound;
-            if (GetFoodItems(itemStorageId).ToList().Count == 0)
+            if (GetFoodItems(itemStorageId).ToList().Count != 0)
                 return ClientError.Conflict;
 
             _dbContext.ItemStorages.Remove(itemStorage);
