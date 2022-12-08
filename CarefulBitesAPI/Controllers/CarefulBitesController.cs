@@ -100,11 +100,11 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult PostUser([FromBody] User user) {
             user.UserId = null;
 
-            var createdUser = _manager.PostUser(user);
+            var createdUserTuple = _manager.PostUser(user);
 
-            switch (createdUser.error) {
+            switch (createdUserTuple.error) {
                 case null:
-                    return Created(new Uri(_baseUri, $"users/{user.UserId}"), createdUser);
+                    return Created(new Uri(_baseUri, $"users/{createdUserTuple.user?.UserId}"), createdUserTuple.user);
                 case ClientError.Conflict:
                     return Conflict();
                 default:
@@ -114,14 +114,30 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPatch("users/{userId}", Name = "PatchUser")]
         public ActionResult PatchUser(int userId, [FromBody] JsonPatchDocument<User> value) {
-            _manager.PatchUser(userId, value);
-            return NoContent();
+            var error = _manager.PatchUser(userId, value);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public ActionResult DeleteUser(int userId) {
-            _manager.DeleteUser(userId);
-            return NoContent();
+            var error = _manager.DeleteUser(userId);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpGet("itemStorages", Name = "GetItemStorages")]
@@ -162,8 +178,7 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult DeleteItemStorage(int itemStorageId) {
             var error = _manager.DeleteItemStorage(itemStorageId);
 
-            switch (error)
-            {
+            switch (error) {
                 case null:
                     return NoContent();
                 case ClientError.NotFound:

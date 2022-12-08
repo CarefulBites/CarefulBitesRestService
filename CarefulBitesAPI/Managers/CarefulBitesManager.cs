@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Managers {
     public enum ClientError {
@@ -94,22 +95,30 @@ namespace CarefulBitesAPI.Managers {
             return (newUser?.Entity, null);
         }
 
-        public void PatchUser(int userId, JsonPatchDocument<User> value) {
+        public ClientError? PatchUser(int userId, JsonPatchDocument<User> value) {
             var user = _dbContext.Users.Find(userId);
 
-            if (user != null)
+            if (user != null) {
                 value.ApplyTo(user);
+                _dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
+                return null;
+            }
+
+            return ClientError.NotFound;
         }
 
-        public void DeleteUser(int userId) {
+        public ClientError? DeleteUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
             if (user != null) {
                 _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
+
+                return null;
             }
+
+            return ClientError.NotFound;
         }
         #endregion
 
