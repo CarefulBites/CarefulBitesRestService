@@ -4,6 +4,6 @@
     {
         public string StrMeal { get; set; }
         public string StrMealThumb { get; set; }
-        public string IdMeal { get; set; }
+        public string? IdMeal { get; set; }
     }
 }

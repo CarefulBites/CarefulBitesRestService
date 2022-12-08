@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Managers {
     public enum ClientError {
@@ -148,7 +147,7 @@ namespace CarefulBitesAPI.Managers {
 
         public ClientError? PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
-            
+
             if (itemStorage != null) {
                 value.ApplyTo(itemStorage);
                 _dbContext.SaveChanges();

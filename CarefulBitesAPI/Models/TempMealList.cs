@@ -2,6 +2,6 @@
 {
     public class TempMealList
     {
-        public List<TempMeal> Meals { get; set; }
+        public List<TempMeal>? Meals { get; set; }
     }
 }

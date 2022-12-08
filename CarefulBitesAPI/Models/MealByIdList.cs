@@ -2,6 +2,6 @@
 {
     public class MealByIdList
     {
-        public List<MealById> Meals { get; set; }
+        public List<MealById>? Meals { get; set; }
     }
 }
