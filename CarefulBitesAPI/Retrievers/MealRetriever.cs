@@ -32,7 +32,8 @@ namespace CarefulBitesAPI.Retrievers {
             if (!response.IsSuccessStatusCode) return null;
 
             var jsonString = await response.Content.ReadAsStringAsync();
-            var deserializedResponse = JsonConvert.DeserializeObject<MealByIdList>(jsonString);
+            var jsonStringTrimmed = jsonString.Replace("null", "\"\"");
+            var deserializedResponse = JsonConvert.DeserializeObject<MealByIdList>(jsonStringTrimmed);
 
             if (deserializedResponse?.Meals != null) return deserializedResponse.Meals.FirstOrDefault();
 
