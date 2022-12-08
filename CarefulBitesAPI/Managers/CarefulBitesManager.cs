@@ -13,6 +13,7 @@ namespace CarefulBitesAPI.Managers {
         public CarefulBitesManager(ICarefulBitesDbContext dbContext) {
             _dbContext = dbContext;
         }
+
         #region FoodItem
         public Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
