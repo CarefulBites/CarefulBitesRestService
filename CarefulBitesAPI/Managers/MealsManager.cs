@@ -1,12 +1,11 @@
 ﻿using CarefulBitesAPI.Models;
 using CarefulBitesAPI.Retrievers;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarefulBitesAPI.Managers
 {
     public class MealsManager
     {
-        public List<TempMeal> GetFood(string ingredient)
+        public List<TempMeal>? GetFood(string ingredient)
         {
             var food = MealRetriever.GetMealsByIngredientsAsync(ingredient);
 

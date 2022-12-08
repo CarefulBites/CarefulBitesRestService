@@ -146,17 +146,22 @@ namespace CarefulBitesAPI.Managers {
             return newItemStorage?.Entity;
         }
 
-        public void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
+        public ClientError? PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
-
-            if (itemStorage != null)
+            
+            if (itemStorage != null) {
                 value.ApplyTo(itemStorage);
+                _dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
+                return null;
+            }
+
+            return ClientError.NotFound;
         }
 
         public ClientError? DeleteItemStorage(int itemStorageId) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
+
             if (itemStorage == null)
                 return ClientError.NotFound;
             if (GetFoodItems(itemStorageId).ToList().Count != 0)
@@ -164,6 +169,7 @@ namespace CarefulBitesAPI.Managers {
 
             _dbContext.ItemStorages.Remove(itemStorage);
             _dbContext.SaveChanges();
+
             return null;
         }
         #endregion

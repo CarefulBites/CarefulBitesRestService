@@ -1,6 +1,4 @@
 ﻿using CarefulBitesAPI.Managers;
-using CarefulBitesAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Controllers
@@ -16,7 +14,7 @@ namespace CarefulBitesAPI.Controllers
         {
             var meals = _manager.GetFood(ingredient);
 
-            if (meals.Any())
+            if (meals != null && meals.Any())
                 return Ok(meals);
 
             return NoContent();

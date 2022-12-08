@@ -894,6 +894,450 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "itemStorages",
+			"item": [
+				{
+					"name": "Test post itemStorage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 201\", function(){\r",
+									"    pm.response.to.have.status(201)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Does response match\", function(){\r",
+									"    pm.expect(pm.response.json()[\"name\"]).to.eql(\"TestItemStorage\");\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"testItemStorageId\", pm.response.json()[\"itemStorageId\"]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestItemStorage\",\r\n    \"userId\": 1\r\n  }"
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test get all itemStorages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 200\", function(){\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Is response array\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(pm.response.json()).to.be.an(\"array\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJuYmYiOjE2NDUxMDA1NjYsImV4cCI6MTY0NTcwNTM2NiwiaWF0IjoxNjQ1MTAwNTY2fQ.Qm5_59yWlej2iIaEBHdQ-6gPZ9toxsu_Fx9eqzD-DPY",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test get \"TestItemStorage\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 200\", function(){\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test response name\", function(){\r",
+									"    pm.expect(pm.response.json()[\"name\"]).to.eql(\"TestItemStorage\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/{{testItemStorageId}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"{{testItemStorageId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test patch \"TestItemStorage\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 204\", function(){\r",
+									"    pm.response.to.have.status(204)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{ \"op\": \"replace\", \"path\": \"/name\", \"value\": \"TestItemStoragePatched\" }\r\n]"
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/{{testItemStorageId}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"{{testItemStorageId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test patch nonexisting id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 404\", function(){\r",
+									"    pm.response.to.have.status(404)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{ \"op\": \"replace\", \"path\": \"/password\", \"value\": \"0000\" }\r\n]"
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/-1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test patch with invalid JSONPatch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 400\", function(){\r",
+									"    pm.response.to.have.status(400)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contractResolver\": {}\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test patch without itemStorageId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 405\", function(){\r",
+									"    pm.response.to.have.status(405)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contractResolver\": {}\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test delete nonexisting id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 404\", function(){\r",
+									"    pm.response.to.have.status(404)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/-1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test delete \"TestItemStorage\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 204\", function(){\r",
+									"    pm.response.to.have.status(204)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/{{testItemStorageId}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"{{testItemStorageId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
@@ -907,6 +1351,10 @@
 		},
 		{
 			"key": "testUserId",
+			"value": ""
+		},
+		{
+			"key": "testItemStorageId",
 			"value": ""
 		}
 	]

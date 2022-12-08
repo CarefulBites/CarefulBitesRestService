@@ -170,8 +170,16 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]
         public ActionResult PatchItemStorage(int itemStorageId, [FromBody] JsonPatchDocument<ItemStorage> value) {
-            _manager.PatchItemStorage(itemStorageId, value);
-            return NoContent();
+            var error = _manager.PatchItemStorage(itemStorageId, value);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
@@ -183,8 +191,10 @@ namespace CarefulBitesAPI.Controllers {
                     return NoContent();
                 case ClientError.NotFound:
                     return NotFound();
-                default:
+                case ClientError.Conflict:
                     return Conflict();
+                default:
+                    return BadRequest();
             }
         }
     }
