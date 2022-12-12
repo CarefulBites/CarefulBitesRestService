@@ -16,15 +16,17 @@ namespace CarefulBitesAPI.Controllers {
 
         private readonly CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
 
+        #region foodItems
         [HttpGet("foodItems", Name = "GetFoodItems")]
         public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
-            var items = _manager.GetFoodItems(out bool ok,itemStorageId);
+            var items = _manager.GetFoodItems(itemStorageId);
 
             if (items.Any())
                 return Ok(items);
 
             return NoContent();
         }
+<<<<<<< HEAD
         [HttpGet("randomFood", Name = "GetRandomFood")]
         public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
             List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool ok, null).ToList();
@@ -41,6 +43,8 @@ namespace CarefulBitesAPI.Controllers {
 			}
             return outList;
         }
+=======
+>>>>>>> a8c5d75288dae760c664be5ee7c5bcd83c562ae1
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItemById")]
         public ActionResult<Item> GetFoodItem(int itemId) {
@@ -78,8 +82,6 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
 
-
-
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
             var error = _manager.DeleteFoodItem(itemId);
@@ -93,6 +95,7 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+<<<<<<< HEAD
         [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
         public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
             var user = _manager.GetUser(userId);
@@ -115,7 +118,11 @@ namespace CarefulBitesAPI.Controllers {
             return NotFound();
         }
        
+=======
+        #endregion
+>>>>>>> a8c5d75288dae760c664be5ee7c5bcd83c562ae1
 
+        #region users
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
             var users = _manager.GetUsers(username);
@@ -179,10 +186,9 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        #endregion
 
-        
-
-
+        #region itemStorages
         [HttpGet("itemStorages", Name = "GetItemStorages")]
         public ActionResult<IEnumerable<ItemStorage>> GetItemStorages([FromQuery] int? userId = null) {
             var itemStorages = _manager.GetItemStorages(userId);
@@ -240,5 +246,6 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        #endregion
     }
 }

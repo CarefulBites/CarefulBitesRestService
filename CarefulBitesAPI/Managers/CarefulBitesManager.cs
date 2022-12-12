@@ -21,17 +21,14 @@ namespace CarefulBitesAPI.Managers {
             return item;
         }
 
-        public IEnumerable<Item> GetFoodItems(out bool found,int? itemStorageId = null) {
+        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null) {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             if (itemStorageId != null)
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
-                found = false;
-            found = true;
+
             return foodItemList;
         }
-
-
 
         public Item? PostFoodItem(Item foodItem) {
             var newItem = _dbContext.Items.Add(foodItem);
@@ -166,7 +163,7 @@ namespace CarefulBitesAPI.Managers {
 
             if (itemStorage == null)
                 return ClientError.NotFound;
-            if (GetFoodItems(out bool hasfound,itemStorageId).ToList().Count != 0)
+            if (GetFoodItems(itemStorageId).ToList().Count != 0)
                 return ClientError.Conflict;
 
             _dbContext.ItemStorages.Remove(itemStorage);
@@ -174,9 +171,6 @@ namespace CarefulBitesAPI.Managers {
 
             return null;
         }
-        #endregion
-
-        #region Recipes
         #endregion
     }
 }
