@@ -31,6 +31,7 @@ namespace CarefulBitesAPI.Controllers
             return NoContent();
 
         }
+        /*
         [HttpGet("randomMeal", Name = "GetUserById")]
         public ActionResult<User> GetFoodItems([FromQuery] int? number = null) {
 
@@ -51,5 +52,6 @@ namespace CarefulBitesAPI.Controllers
 			}
             return outList;
         }
+        */
     }
 }
