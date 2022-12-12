@@ -18,7 +18,7 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpGet("foodItems", Name = "GetFoodItems")]
         public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
-            var items = _manager.GetFoodItems(itemStorageId);
+            var items = _manager.GetFoodItems(out bool ok,itemStorageId);
 
             if (items.Any())
                 return Ok(items);
@@ -26,18 +26,18 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
         [HttpGet("randomFood", Name = "GetUserById")]
-        public ActionResult<User> GetFoodItems([FromQuery] int? number = null) {
-            List<Item> allfoods = _manager.GetFoodItems(null);
+        public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
+            List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool ok, null).ToList();
             Random rand = new Random();
             if (number == null)
                 number = 1;
 
-            List<Item> outList = new List<Item>()
+            List<CarefulBitesAPI.Item> outList = new List<CarefulBitesAPI.Item>();
             for (int i = 0; i < number; i++)
 			{
-                int id = (int)rand.Next(allfoods.count);
-                outList.Add(allfoods[id])
-                allfoods.removeAt(id);
+                int id = (int)rand.Next(allfoods.Count());
+                outList.Add(allfoods[id]);
+                allfoods.RemoveAt(id);
 			}
             return outList;
         }
@@ -94,22 +94,22 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
         [HttpGet("usersFood/{userId}", Name = "GetUserById")]
-        public ActionResult<User> GetUser(int userId,[FromQuery] int? itemStorageId = null) {
+        public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
             var user = _manager.GetUser(userId);
 
             if (user == null)
                 return NotFound();
             
             var itemStorages = _manager.GetItemStorages(user.UserId);
-            List<Item> foods = new List<Item>();
+            List<CarefulBitesAPI.Item> foods = new List<CarefulBitesAPI.Item>();
             bool foundfood = false;
      
-            foreach (var item in itemStorages) {
-                List<Item> temp = _manager.GetFoodItems(itemId,out foundfood);
+            foreach (var stor in itemStorages) {
+                List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
                 if (foundfood)
                     foods.AddRange(temp);
             }
-            if(foods.count>0)
+            if(foods.Count()>0)
                 return foods;
 
             return NotFound();

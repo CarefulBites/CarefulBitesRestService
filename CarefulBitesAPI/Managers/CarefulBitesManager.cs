@@ -21,7 +21,7 @@ namespace CarefulBitesAPI.Managers {
             return item;
         }
 
-        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null,out found) {
+        public IEnumerable<Item> GetFoodItems(out bool found,int? itemStorageId = null) {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             if (itemStorageId != null)
@@ -166,7 +166,7 @@ namespace CarefulBitesAPI.Managers {
 
             if (itemStorage == null)
                 return ClientError.NotFound;
-            if (GetFoodItems(itemStorageId).ToList().Count != 0)
+            if (GetFoodItems(out bool hasfound,itemStorageId).ToList().Count != 0)
                 return ClientError.Conflict;
 
             _dbContext.ItemStorages.Remove(itemStorage);
