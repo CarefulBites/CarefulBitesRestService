@@ -25,6 +25,22 @@ namespace CarefulBitesAPI.Controllers {
 
             return NoContent();
         }
+        [HttpGet("randomFood", Name = "GetUserById")]
+        public ActionResult<User> GetFoodItems([FromQuery] int? number = null) {
+            List<Item> allfoods = _manager.GetFoodItems(null);
+            Random rand = new Random();
+            if (number == null)
+                number = 1;
+
+            List<Item> outList = new List<Item>()
+            for (int i = 0; i < number; i++)
+			{
+                int id = (int)rand.Next(allfoods.count);
+                outList.Add(allfoods[id])
+                allfoods.removeAt(id);
+			}
+            return outList;
+        }
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItemById")]
         public ActionResult<Item> GetFoodItem(int itemId) {
@@ -77,6 +93,28 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        [HttpGet("usersFood/{userId}", Name = "GetUserById")]
+        public ActionResult<User> GetUser(int userId,[FromQuery] int? itemStorageId = null) {
+            var user = _manager.GetUser(userId);
+
+            if (user == null)
+                return NotFound();
+            
+            var itemStorages = _manager.GetItemStorages(user.UserId);
+            List<Item> foods = new List<Item>();
+            bool foundfood = false;
+     
+            foreach (var item in itemStorages) {
+                List<Item> temp = _manager.GetFoodItems(itemId,out foundfood);
+                if (foundfood)
+                    foods.AddRange(temp);
+            }
+            if(foods.count>0)
+                return foods;
+
+            return NotFound();
+        }
+       
 
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
@@ -102,11 +140,11 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult PostUser([FromBody] User user) {
             user.UserId = null;
 
-            var createdUser = _manager.PostUser(user);
+            var createdUserTuple = _manager.PostUser(user);
 
-            switch (createdUser.error) {
+            switch (createdUserTuple.error) {
                 case null:
-                    return Created(new Uri(_baseUri, $"users/{user.UserId}"), createdUser);
+                    return Created(new Uri(_baseUri, $"users/{createdUserTuple.user?.UserId}"), createdUserTuple.user);
                 case ClientError.Conflict:
                     return Conflict();
                 default:
@@ -116,14 +154,30 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPatch("users/{userId}", Name = "PatchUser")]
         public ActionResult PatchUser(int userId, [FromBody] JsonPatchDocument<User> value) {
-            _manager.PatchUser(userId, value);
-            return NoContent();
+            var error = _manager.PatchUser(userId, value);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public ActionResult DeleteUser(int userId) {
-            _manager.DeleteUser(userId);
-            return NoContent();
+            var error = _manager.DeleteUser(userId);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         
@@ -159,14 +213,32 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpPatch("itemStorages/{itemStorageId}", Name = "PatchItemStorage")]
         public ActionResult PatchItemStorage(int itemStorageId, [FromBody] JsonPatchDocument<ItemStorage> value) {
-            _manager.PatchItemStorage(itemStorageId, value);
-            return NoContent();
+            var error = _manager.PatchItemStorage(itemStorageId, value);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                default:
+                    return BadRequest();
+            }
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
         public ActionResult DeleteItemStorage(int itemStorageId) {
-            _manager.DeleteItemStorage(itemStorageId);
-            return NoContent();
+            var error = _manager.DeleteItemStorage(itemStorageId);
+
+            switch (error) {
+                case null:
+                    return NoContent();
+                case ClientError.NotFound:
+                    return NotFound();
+                case ClientError.Conflict:
+                    return Conflict();
+                default:
+                    return BadRequest();
+            }
         }
     }
 }

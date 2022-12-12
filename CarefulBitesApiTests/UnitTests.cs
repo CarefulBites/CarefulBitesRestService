@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
-        #region Fooditems
+        #region FoodItems
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems());
@@ -35,6 +35,17 @@ namespace CarefulBitesAPITests {
         }
 
         [Fact]
+        public void TestDeleteFoodItemNotFound() {
+            Assert.Empty(_manager.GetFoodItems());
+
+            _manager.DeleteFoodItem(7);
+
+            var error = _manager.DeleteFoodItem(7);
+
+            Assert.Equal(ClientError.NotFound, error);
+        }
+
+        [Fact]
         public void TestPostFoodItemAndPatchFoodItem() {
             Assert.Empty(_manager.GetFoodItems());
 
@@ -58,6 +69,62 @@ namespace CarefulBitesAPITests {
             _manager.PatchFoodItem(7, jsonPatch);
 
             Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7)?.Name);
+        }
+
+        [Fact]
+        public void TestPatchFoodItemNotFound() {
+            Assert.Empty(_manager.GetFoodItems());
+
+            var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new Operation<Item>("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
+
+            var error = _manager.PatchFoodItem(7, jsonPatch);
+
+            Assert.Equal(ClientError.NotFound, error);
+        }
+
+        [Fact]
+        public void TestGetFoodItemsByItemStorageId() {
+            Assert.Empty(_manager.GetFoodItems());
+
+            var testItem = new Item() {
+                ItemId = 7,
+                ItemStorageId = 7,
+                Name = "CoolPeanuts",
+                Amount = 3,
+                Unit = 0,
+                CaloriesPer = 200,
+                ExpirationDate = new DateTime(2022, 12, 24)
+            };
+
+            var testItem2 = new Item() {
+                ItemId = 8,
+                ItemStorageId = 7,
+                Name = "CoolCucumbers",
+                Amount = 3,
+                Unit = 0,
+                CaloriesPer = 200,
+                ExpirationDate = new DateTime(2022, 12, 24)
+            };
+
+            var testItem3 = new Item() {
+                ItemId = 9,
+                ItemStorageId = 8,
+                Name = "CoolTomatoes",
+                Amount = 3,
+                Unit = 0,
+                CaloriesPer = 200,
+                ExpirationDate = new DateTime(2022, 12, 24)
+            };
+
+            _manager.PostFoodItem(testItem);
+            _manager.PostFoodItem(testItem2);
+            _manager.PostFoodItem(testItem3);
+
+            Assert.NotEmpty(_manager.GetFoodItems());
+            Assert.Equal(3, _manager.GetFoodItems().Count());
+
+            Assert.Single(_manager.GetFoodItems(itemStorageId: 8));
+            Assert.Equal(2, _manager.GetFoodItems(itemStorageId: 7).Count());
         }
         #endregion
 
@@ -86,12 +153,10 @@ namespace CarefulBitesAPITests {
         }
 
         [Fact]
-        public void TestPostUserAndPatchUser()
-        {
+        public void TestPostUserAndPatchUser() {
             Assert.Empty(_manager.GetUsers());
 
-            var testUser = new User()
-            {
+            var testUser = new User() {
                 UserId = 7,
                 Username = "Barry",
                 Password = "1234",
@@ -103,14 +168,170 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal(testUser, _manager.GetUser(7));
 
-            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/Username", "", "Larry"), new Operation<User>("replace", "/Password", "", "12345") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/username", "", "Larry"), new Operation<User>("replace", "/password", "", "12345") }, new DefaultContractResolver());
 
             _manager.PatchUser(7, jsonPatch);
 
             Assert.Equal("Larry", _manager.GetUser(7)?.Username);
             Assert.Equal("12345", _manager.GetUser(7)?.Password);
         }
+
+        [Fact]
+        public void TestPostUsersWithSameUsernameAndGetUsersByUsername() {
+            Assert.Empty(_manager.GetUsers());
+
+            var testUser = new User() {
+                UserId = 7,
+                Username = "Barry",
+                Password = "1234",
+            };
+
+            var testUser2 = new User() {
+                UserId = 8,
+                Username = "Barry",
+                Password = "1234",
+            };
+
+            var testUser3 = new User() {
+                UserId = 9,
+                Username = "Herman",
+                Password = "1234",
+            };
+
+            _manager.PostUser(testUser);
+            var error = _manager.PostUser(testUser2).error;
+
+            Assert.Equal(ClientError.Conflict, error);
+
+            _manager.PostUser(testUser3);
+
+            Assert.NotEmpty(_manager.GetUsers());
+            Assert.Equal(2, _manager.GetUsers().Count());
+
+            Assert.Single(_manager.GetUsers(username: "Herman"));
+            Assert.Single(_manager.GetUsers(username: "Barry"));
+        }
         #endregion
 
+        #region ItemStorages
+        [Fact]
+        public void TestPostItemStorageAndDeleteItemStorage() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+
+            Assert.Single(_manager.GetItemStorages());
+
+            Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
+
+            _manager.DeleteItemStorage(7);
+
+            Assert.Null(_manager.GetItemStorage(7));
+
+            Assert.Empty(_manager.GetItemStorages());
+        }
+
+        [Fact]
+        public void TestGetItemStoragesByUserId() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            var testItemStorage2 = new ItemStorage() {
+                Name = "MyTummy",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            var testItemStorage3 = new ItemStorage() {
+                Name = "GarbagePail",
+                UserId = 8,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+            _manager.PostItemStorage(testItemStorage2);
+            _manager.PostItemStorage(testItemStorage3);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+            Assert.Equal(3, _manager.GetItemStorages().Count());
+
+            Assert.Single(_manager.GetItemStorages(userId: 8));
+            Assert.Equal(2, _manager.GetItemStorages(userId: 7).Count());
+        }
+
+        [Fact]
+        public void TestPostItemStorageAndPatchItemStorage() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            Assert.NotEmpty(_manager.GetItemStorages());
+
+            Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
+
+            var jsonPatch = new JsonPatchDocument<ItemStorage>(new List<Operation<ItemStorage>>() { new Operation<ItemStorage>("replace", "/name", "", "MyTummy") }, new DefaultContractResolver());
+
+            _manager.PatchItemStorage(7, jsonPatch);
+
+            Assert.Equal("MyTummy", _manager.GetItemStorage(7)?.Name);
+        }
+
+        [Fact]
+        public void TestDeleteItemStorageNotFound() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var error = _manager.DeleteItemStorage(7);
+
+            Assert.Equal(ClientError.NotFound, error);
+        }
+
+        [Fact]
+        public void TestDeleteItemStorageConflict() {
+            Assert.Empty(_manager.GetItemStorages());
+
+            var testItemStorage = new ItemStorage() {
+                Name = "TheDump",
+                UserId = 7,
+                ItemStorageId = 7
+            };
+
+            _manager.PostItemStorage(testItemStorage);
+
+            var testItem = new Item() {
+                ItemId = 7,
+                Name = "CoolPeanuts",
+                Amount = 3,
+                Unit = 0,
+                ItemStorageId = 7,
+                CaloriesPer = 200,
+                ExpirationDate = new DateTime(2022, 12, 24)
+            };
+
+            _manager.PostFoodItem(testItem);
+
+            var error = _manager.DeleteItemStorage(7);
+
+            Assert.Equal(ClientError.Conflict, error);
+        }
+        #endregion
     }
 }

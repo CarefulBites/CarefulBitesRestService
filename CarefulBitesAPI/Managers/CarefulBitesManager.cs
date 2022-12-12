@@ -14,20 +14,24 @@ namespace CarefulBitesAPI.Managers {
             _dbContext = dbContext;
         }
 
+        #region FoodItem
         public Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             return item;
         }
 
-        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null) {
+        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null,out found) {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             if (itemStorageId != null)
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
-
+                found = false;
+            found = true;
             return foodItemList;
         }
+
+
 
         public Item? PostFoodItem(Item foodItem) {
             var newItem = _dbContext.Items.Add(foodItem);
@@ -62,7 +66,9 @@ namespace CarefulBitesAPI.Managers {
 
             return ClientError.NotFound;
         }
+        #endregion
 
+        #region User
         public User? GetUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
@@ -91,24 +97,34 @@ namespace CarefulBitesAPI.Managers {
             return (newUser?.Entity, null);
         }
 
-        public void PatchUser(int userId, JsonPatchDocument<User> value) {
+        public ClientError? PatchUser(int userId, JsonPatchDocument<User> value) {
             var user = _dbContext.Users.Find(userId);
 
-            if (user != null)
+            if (user != null) {
                 value.ApplyTo(user);
+                _dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
+                return null;
+            }
+
+            return ClientError.NotFound;
         }
 
-        public void DeleteUser(int userId) {
+        public ClientError? DeleteUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
             if (user != null) {
                 _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
-            }
-        }
 
+                return null;
+            }
+
+            return ClientError.NotFound;
+        }
+        #endregion
+
+        #region ItemStorage
         public IEnumerable<ItemStorage> GetItemStorages(int? userId = null) {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
@@ -132,22 +148,35 @@ namespace CarefulBitesAPI.Managers {
             return newItemStorage?.Entity;
         }
 
-        public void PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
+        public ClientError? PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
-            if (itemStorage != null)
-                value.ApplyTo(itemStorage);
-
-            _dbContext.SaveChanges();
-        }
-
-        public void DeleteItemStorage(int itemStorageId) {
-            var itemStorage = _dbContext.Users.Find(itemStorageId);
-
             if (itemStorage != null) {
-                _dbContext.Users.Remove(itemStorage);
+                value.ApplyTo(itemStorage);
                 _dbContext.SaveChanges();
+
+                return null;
             }
+
+            return ClientError.NotFound;
         }
+
+        public ClientError? DeleteItemStorage(int itemStorageId) {
+            var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
+
+            if (itemStorage == null)
+                return ClientError.NotFound;
+            if (GetFoodItems(itemStorageId).ToList().Count != 0)
+                return ClientError.Conflict;
+
+            _dbContext.ItemStorages.Remove(itemStorage);
+            _dbContext.SaveChanges();
+
+            return null;
+        }
+        #endregion
+
+        #region Recipes
+        #endregion
     }
 }
