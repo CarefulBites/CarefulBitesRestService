@@ -25,7 +25,7 @@ namespace CarefulBitesAPI.Controllers {
 
             return NoContent();
         }
-        [HttpGet("randomFood", Name = "GetUserById")]
+        [HttpGet("randomFood", Name = "GetRandomFood")]
         public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
             List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool ok, null).ToList();
             Random rand = new Random();
@@ -93,7 +93,7 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
-        [HttpGet("usersFood/{userId}", Name = "GetUserById")]
+        [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
         public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
             var user = _manager.GetUser(userId);
 
@@ -127,7 +127,7 @@ namespace CarefulBitesAPI.Controllers {
         }
 
         [HttpGet("users/{userId}", Name = "GetUserById")]
-        public ActionResult<User> GetUser(int userId) {
+        public ActionResult<User> GetUserById(int userId) {
             var user = _manager.GetUser(userId);
 
             if (user != null)
