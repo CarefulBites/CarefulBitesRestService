@@ -97,25 +97,24 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
             var user = _manager.GetUser(userId);
 
-            if (user == null)
+           if (user == null)
                 return NotFound();
-
+            
             var itemStorages = _manager.GetItemStorages(user.UserId);
             List<CarefulBitesAPI.Item> foods = new List<CarefulBitesAPI.Item>();
             bool foundfood = false;
-
-            foreach (var stor in itemStorages)
-            {
+     
+            foreach (var stor in itemStorages) {
                 List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
                 if (foundfood)
                     foods.AddRange(temp);
             }
-            if (foods.Count() > 0)
+            if(foods.Count()>0)
                 return foods;
 
             return NotFound();
         }
-
+        #endregion
         #region users
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
@@ -241,5 +240,6 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
         #endregion
+
     }
 }
