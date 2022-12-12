@@ -16,6 +16,7 @@ namespace CarefulBitesAPI.Controllers {
 
         private readonly CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
 
+        #region foodItems
         [HttpGet("foodItems", Name = "GetFoodItems")]
         public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
             var items = _manager.GetFoodItems(itemStorageId);
@@ -75,7 +76,9 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        #endregion
 
+        #region users
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
             var users = _manager.GetUsers(username);
@@ -139,7 +142,9 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        #endregion
 
+        #region itemStorages
         [HttpGet("itemStorages", Name = "GetItemStorages")]
         public ActionResult<IEnumerable<ItemStorage>> GetItemStorages([FromQuery] int? userId = null) {
             var itemStorages = _manager.GetItemStorages(userId);
@@ -197,5 +202,6 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        #endregion
     }
 }

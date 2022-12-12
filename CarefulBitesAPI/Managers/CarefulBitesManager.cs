@@ -172,8 +172,5 @@ namespace CarefulBitesAPI.Managers {
             return null;
         }
         #endregion
-
-        #region Recipes
-        #endregion
     }
 }
