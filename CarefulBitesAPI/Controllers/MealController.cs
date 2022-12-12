@@ -31,5 +31,21 @@ namespace CarefulBitesAPI.Controllers
             return NoContent();
 
         }
+        [HttpGet("randomMeal", Name = "GetUserById")]
+        public ActionResult<User> GetFoodItems([FromQuery] int? number = null) {
+            List<Item> meals = _manager.GetFood(ingredient);
+            Random rand = new Random();
+            if (number == null)
+                number = 1;
+
+            List<Item> outList = new List<Item>()
+            for (int i = 0; i < number; i++)
+			{
+                int id = (int)rand.Next(meals.count);
+                outList.Add(allfoods[id])
+                meals.removeAt(id);
+			}
+            return outList;
+        }
     }
 }

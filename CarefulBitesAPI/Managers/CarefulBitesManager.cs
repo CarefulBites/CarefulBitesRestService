@@ -21,14 +21,17 @@ namespace CarefulBitesAPI.Managers {
             return item;
         }
 
-        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null) {
+        public IEnumerable<Item> GetFoodItems(int? itemStorageId = null,out found) {
             List<Item> foodItemList = _dbContext.Items.ToList();
 
             if (itemStorageId != null)
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
-
+                found = false;
+            found = true;
             return foodItemList;
         }
+
+
 
         public Item? PostFoodItem(Item foodItem) {
             var newItem = _dbContext.Items.Add(foodItem);

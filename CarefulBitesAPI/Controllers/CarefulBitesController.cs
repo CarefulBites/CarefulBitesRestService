@@ -25,6 +25,22 @@ namespace CarefulBitesAPI.Controllers {
 
             return NoContent();
         }
+        [HttpGet("randomFood", Name = "GetUserById")]
+        public ActionResult<User> GetFoodItems([FromQuery] int? number = null) {
+            List<Item> allfoods = _manager.GetFoodItems(null);
+            Random rand = new Random();
+            if (number == null)
+                number = 1;
+
+            List<Item> outList = new List<Item>()
+            for (int i = 0; i < number; i++)
+			{
+                int id = (int)rand.Next(allfoods.count);
+                outList.Add(allfoods[id])
+                allfoods.removeAt(id);
+			}
+            return outList;
+        }
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItemById")]
         public ActionResult<Item> GetFoodItem(int itemId) {
@@ -75,6 +91,28 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+        [HttpGet("usersFood/{userId}", Name = "GetUserById")]
+        public ActionResult<User> GetUser(int userId,[FromQuery] int? itemStorageId = null) {
+            var user = _manager.GetUser(userId);
+
+            if (user == null)
+                return NotFound();
+            
+            var itemStorages = _manager.GetItemStorages(user.UserId);
+            List<Item> foods = new List<Item>();
+            bool foundfood = false;
+     
+            foreach (var item in itemStorages) {
+                List<Item> temp = _manager.GetFoodItems(itemId,out foundfood);
+                if (foundfood)
+                    foods.AddRange(temp);
+            }
+            if(foods.count>0)
+                return foods;
+
+            return NotFound();
+        }
+       
 
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
