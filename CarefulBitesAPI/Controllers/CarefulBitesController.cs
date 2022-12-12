@@ -19,7 +19,7 @@ namespace CarefulBitesAPI.Controllers {
         #region foodItems
         [HttpGet("foodItems", Name = "GetFoodItems")]
         public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
-            var items = _manager.GetFoodItems(itemStorageId);
+            var items = _manager.GetFoodItems(out bool found, itemStorageId);
 
             if (items.Any())
                 return Ok(items);
