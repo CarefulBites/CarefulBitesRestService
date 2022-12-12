@@ -29,7 +29,7 @@ namespace CarefulBitesAPI.Controllers {
         [HttpGet("randomFood", Name = "GetRandomFood")]
         public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null)
         {
-            List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(null).ToList();
+            List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool foundFood,null).ToList();
             Random rand = new Random();
             if (number == null)
                 number = 1;
