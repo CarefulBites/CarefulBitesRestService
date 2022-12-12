@@ -9,8 +9,9 @@ namespace CarefulBitesAPITests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
         #region FoodItems
         [Fact]
+
         public void TestPostFoodItemAndDeleteFoodItem() {
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -23,7 +24,7 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetFoodItems());
+            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -31,12 +32,14 @@ namespace CarefulBitesAPITests {
 
             Assert.Null(_manager.GetFoodItem(7));
 
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out foundFood));
+
+
         }
 
         [Fact]
         public void TestDeleteFoodItemNotFound() {
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
 
             _manager.DeleteFoodItem(7);
 
@@ -47,7 +50,7 @@ namespace CarefulBitesAPITests {
 
         [Fact]
         public void TestPostFoodItemAndPatchFoodItem() {
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -55,12 +58,19 @@ namespace CarefulBitesAPITests {
                 Amount = 3,
                 Unit = 0,
                 CaloriesPer = 200,
+                ItemStorageId = 3,
                 ExpirationDate = new DateTime(2022, 12, 24)
             };
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetFoodItems());
+            Assert.NotEmpty(_manager.GetFoodItems(out foundFood, 5));
+
+            Assert.False(foundFood);
+
+            Assert.NotEmpty(_manager.GetFoodItems(out foundFood, 3));
+
+            Assert.True(foundFood);
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -69,11 +79,13 @@ namespace CarefulBitesAPITests {
             _manager.PatchFoodItem(7, jsonPatch);
 
             Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7)?.Name);
+
+          
         }
 
         [Fact]
         public void TestPatchFoodItemNotFound() {
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
 
             var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new Operation<Item>("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
 
@@ -84,7 +96,9 @@ namespace CarefulBitesAPITests {
 
         [Fact]
         public void TestGetFoodItemsByItemStorageId() {
-            Assert.Empty(_manager.GetFoodItems());
+            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+
+           
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -116,15 +130,22 @@ namespace CarefulBitesAPITests {
                 ExpirationDate = new DateTime(2022, 12, 24)
             };
 
+
+
             _manager.PostFoodItem(testItem);
             _manager.PostFoodItem(testItem2);
             _manager.PostFoodItem(testItem3);
+          
+            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
 
-            Assert.NotEmpty(_manager.GetFoodItems());
-            Assert.Equal(3, _manager.GetFoodItems().Count());
+            Assert.Equal(3, _manager.GetFoodItems(out foundFood).Count());
+            Assert.False(foundFood);
 
-            Assert.Single(_manager.GetFoodItems(itemStorageId: 8));
-            Assert.Equal(2, _manager.GetFoodItems(itemStorageId: 7).Count());
+            Assert.Single(_manager.GetFoodItems(out foundFood, itemStorageId: 8));
+            Assert.True(foundFood);
+            Assert.Equal(2, _manager.GetFoodItems(out foundFood,itemStorageId: 7).Count());
+
+            Assert.True(foundFood);
         }
         #endregion
 
