@@ -62,6 +62,8 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
 
+
+
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
             var error = _manager.DeleteFoodItem(itemId);
@@ -123,6 +125,9 @@ namespace CarefulBitesAPI.Controllers {
             _manager.DeleteUser(userId);
             return NoContent();
         }
+
+        
+
 
         [HttpGet("itemStorages", Name = "GetItemStorages")]
         public ActionResult<IEnumerable<ItemStorage>> GetItemStorages([FromQuery] int? userId = null) {
