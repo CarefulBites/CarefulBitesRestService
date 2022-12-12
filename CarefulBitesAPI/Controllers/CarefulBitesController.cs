@@ -26,25 +26,12 @@ namespace CarefulBitesAPI.Controllers {
 
             return NoContent();
         }
-<<<<<<< HEAD
         [HttpGet("randomFood", Name = "GetRandomFood")]
         public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
             List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool ok, null).ToList();
             Random rand = new Random();
             if (number == null)
                 number = 1;
-
-            List<CarefulBitesAPI.Item> outList = new List<CarefulBitesAPI.Item>();
-            for (int i = 0; i < number; i++)
-			{
-                int id = (int)rand.Next(allfoods.Count());
-                outList.Add(allfoods[id]);
-                allfoods.RemoveAt(id);
-			}
-            return outList;
-        }
-=======
->>>>>>> a8c5d75288dae760c664be5ee7c5bcd83c562ae1
 
         [HttpGet("foodItems/{itemId}", Name = "GetFoodItemById")]
         public ActionResult<Item> GetFoodItem(int itemId) {
@@ -95,32 +82,9 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
-<<<<<<< HEAD
         [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
         public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
             var user = _manager.GetUser(userId);
-
-            if (user == null)
-                return NotFound();
-            
-            var itemStorages = _manager.GetItemStorages(user.UserId);
-            List<CarefulBitesAPI.Item> foods = new List<CarefulBitesAPI.Item>();
-            bool foundfood = false;
-     
-            foreach (var stor in itemStorages) {
-                List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
-                if (foundfood)
-                    foods.AddRange(temp);
-            }
-            if(foods.Count()>0)
-                return foods;
-
-            return NotFound();
-        }
-       
-=======
-        #endregion
->>>>>>> a8c5d75288dae760c664be5ee7c5bcd83c562ae1
 
         #region users
         [HttpGet("users", Name = "GetUsers")]
