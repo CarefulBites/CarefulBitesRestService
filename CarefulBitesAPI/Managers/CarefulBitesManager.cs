@@ -27,6 +27,7 @@ namespace CarefulBitesAPI.Managers {
             if (itemStorageId != null) {
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
                 foundFood = true;
+                return
             }
             foundFood = false;
             return foodItemList;

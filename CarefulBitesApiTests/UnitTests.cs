@@ -64,13 +64,13 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetFoodItems(out foundFood, 5));
+            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
 
             Assert.False(foundFood);
 
             Assert.NotEmpty(_manager.GetFoodItems(out foundFood, 3));
 
-            Assert.True(foundFood);
+            Assert.Equal(true,foundFood);
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -97,7 +97,6 @@ namespace CarefulBitesAPITests {
         [Fact]
         public void TestGetFoodItemsByItemStorageId() {
             Assert.Empty(_manager.GetFoodItems(out bool foundFood));
-
            
 
             var testItem = new Item() {
