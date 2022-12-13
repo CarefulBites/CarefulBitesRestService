@@ -14,14 +14,14 @@ namespace CarefulBitesAPI.Managers {
             _dbContext = dbContext;
         }
 
-        #region FoodItem
+        #region foodItems
         public Item? GetFoodItem(int itemId) {
             var item = _dbContext.Items.Find(itemId);
 
             return item;
         }
 
-        public IEnumerable<Item> GetFoodItems(out bool foundFood,int? itemStorageId = null) {
+        public IEnumerable<Item> GetFoodItems(out bool foundFood, int? itemStorageId = null) {
             List<Item> foodItemList = _dbContext.Items.ToList();
             foundFood = itemStorageId != null;
             if (itemStorageId != null)
@@ -65,7 +65,7 @@ namespace CarefulBitesAPI.Managers {
         }
         #endregion
 
-        #region User
+        #region users
         public User? GetUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
@@ -121,7 +121,7 @@ namespace CarefulBitesAPI.Managers {
         }
         #endregion
 
-        #region ItemStorage
+        #region itemStorages
         public IEnumerable<ItemStorage> GetItemStorages(int? userId = null) {
             List<ItemStorage> itemStorageList = _dbContext.ItemStorages.ToList();
 
@@ -163,7 +163,7 @@ namespace CarefulBitesAPI.Managers {
 
             if (itemStorage == null)
                 return ClientError.NotFound;
-            if (GetFoodItems(out bool found,itemStorageId).ToList().Count != 0)
+            if (GetFoodItems(out _, itemStorageId).ToList().Count != 0)
                 return ClientError.Conflict;
 
             _dbContext.ItemStorages.Remove(itemStorage);
