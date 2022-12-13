@@ -22,7 +22,7 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     environment:
-      name: 'Development'
+      name: 'Deployment'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
