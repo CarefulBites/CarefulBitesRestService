@@ -77,6 +77,7 @@ namespace CarefulBitesAPI.Controllers {
                 default:
                     return BadRequest();
             }
+
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
