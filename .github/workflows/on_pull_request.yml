@@ -18,6 +18,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: 'Testing'
     
     steps:
       - uses: actions/checkout@v3
