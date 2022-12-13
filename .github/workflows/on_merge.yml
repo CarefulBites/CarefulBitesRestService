@@ -1,4 +1,4 @@
-name: Deploy ASP.Net Core app to Azure Web App
+name: Build and deploy ASP.Net Core app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: CarefulBitesAPI20221128134821    # set this to the name of your Azure Web App
@@ -16,8 +16,50 @@ permissions:
   contents: read
 
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Testing'
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+        
+      - name: Run unit tests
+        run: dotnet test
+        
+      - name: Install newman
+        run: npm install -g newman
+      
+      - name: Run the API and Postman tests
+        run: |
+             dotnet run --project "./CarefulBitesAPI" &
+             sleep 10
+             newman run "testSuite.postman_collection.json" --insecure
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
     permissions:
       contents: none
     runs-on: ubuntu-latest
