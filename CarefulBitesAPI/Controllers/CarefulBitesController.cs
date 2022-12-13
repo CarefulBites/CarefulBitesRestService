@@ -21,27 +21,26 @@ namespace CarefulBitesAPI.Controllers {
         #region foodItems
         [HttpGet("foodItems", Name = "GetFoodItems")]
         public ActionResult<IEnumerable<Item>> GetFoodItems([FromQuery] int? itemStorageId = null) {
-            var items = _manager.GetFoodItems(out bool found, itemStorageId);
+            var items = _manager.GetFoodItems(out _, itemStorageId);
 
             if (items.Any())
                 return Ok(items);
 
             return NoContent();
         }
+
         [HttpGet("randomFood", Name = "GetRandomFood")]
-        public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null)
-        {
-            List<CarefulBitesAPI.Item> allfoods = _manager.GetFoodItems(out bool foundFood,null).ToList();
+        public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
+            List<Item> allFoods = _manager.GetFoodItems(out _).ToList();
             Random rand = new Random();
             if (number == null)
                 number = 1;
 
-            List<CarefulBitesAPI.Item> outList = new List<CarefulBitesAPI.Item>();
-            for (int i = 0; i < number; i++)
-            {
-                int id = (int)rand.Next(allfoods.Count());
-                outList.Add(allfoods[id]);
-                allfoods.RemoveAt(id);
+            List<Item> outList = new List<Item>();
+            for (int i = 0; i < number; i++) {
+                int id = rand.Next(allFoods.Count);
+                outList.Add(allFoods[id]);
+                allFoods.RemoveAt(id);
             }
             return outList;
         }
@@ -95,6 +94,7 @@ namespace CarefulBitesAPI.Controllers {
                     return BadRequest();
             }
         }
+
         [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
         public ActionResult<IEnumerable<Item>> GetUsersFood(int userId, [FromQuery] int? index = null, [FromQuery] bool exact = false) {
             var user = _manager.GetUser(userId);
@@ -132,6 +132,7 @@ namespace CarefulBitesAPI.Controllers {
             return NotFound();
         }
         #endregion
+
         #region users
         [HttpGet("users", Name = "GetUsers")]
         public ActionResult<IEnumerable<User>> GetUsers([FromQuery] string? username = null) {
@@ -257,6 +258,5 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
         #endregion
-
     }
 }

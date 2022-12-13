@@ -7,11 +7,11 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
+
         #region FoodItems
         [Fact]
-
         public void TestPostFoodItemAndDeleteFoodItem() {
-            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+            Assert.Empty(_manager.GetFoodItems(out _));
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -24,7 +24,7 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
+            Assert.NotEmpty(_manager.GetFoodItems(out _));
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -32,14 +32,12 @@ namespace CarefulBitesAPITests {
 
             Assert.Null(_manager.GetFoodItem(7));
 
-            Assert.Empty(_manager.GetFoodItems(out foundFood));
-
-
+            Assert.Empty(_manager.GetFoodItems(out _));
         }
 
         [Fact]
         public void TestDeleteFoodItemNotFound() {
-            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+            Assert.Empty(_manager.GetFoodItems(out _));
 
             _manager.DeleteFoodItem(7);
 
@@ -70,7 +68,7 @@ namespace CarefulBitesAPITests {
 
             Assert.NotEmpty(_manager.GetFoodItems(out foundFood, 3));
 
-            Assert.Equal(true,foundFood);
+            Assert.True(foundFood);
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
@@ -79,13 +77,11 @@ namespace CarefulBitesAPITests {
             _manager.PatchFoodItem(7, jsonPatch);
 
             Assert.Equal("CoolerPeanuts", _manager.GetFoodItem(7)?.Name);
-
-          
         }
 
         [Fact]
         public void TestPatchFoodItemNotFound() {
-            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+            Assert.Empty(_manager.GetFoodItems(out _));
 
             var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new Operation<Item>("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
 
@@ -97,7 +93,6 @@ namespace CarefulBitesAPITests {
         [Fact]
         public void TestGetFoodItemsByItemStorageId() {
             Assert.Empty(_manager.GetFoodItems(out bool foundFood));
-           
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -128,8 +123,6 @@ namespace CarefulBitesAPITests {
                 CaloriesPer = 200,
                 ExpirationDate = new DateTime(2022, 12, 24)
             };
-
-
 
             _manager.PostFoodItem(testItem);
             _manager.PostFoodItem(testItem2);
