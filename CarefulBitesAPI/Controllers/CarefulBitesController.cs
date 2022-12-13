@@ -1,6 +1,8 @@
 using CarefulBitesAPI.Managers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
@@ -94,22 +96,37 @@ namespace CarefulBitesAPI.Controllers {
             }
         }
         [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
-        public ActionResult<IEnumerable<Item>> GetUsersFood(int userId,[FromQuery] int? itemStorageId = null) {
+        public ActionResult<IEnumerable<Item>> GetUsersFood(int userId, [FromQuery] int? index = null, [FromQuery] bool exact = false) {
             var user = _manager.GetUser(userId);
 
-           if (user == null)
+            if (user == null)
                 return NotFound();
-            
+
             var itemStorages = _manager.GetItemStorages(user.UserId);
+            ItemStorage[] storList = itemStorages.ToArray();
             List<CarefulBitesAPI.Item> foods = new List<CarefulBitesAPI.Item>();
             bool foundfood = false;
-     
-            foreach (var stor in itemStorages) {
-                List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
+
+            if (index == null) {
+
+                foreach (var stor in itemStorages) {
+                    List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
+                    if (foundfood)
+                        foods.AddRange(temp);
+                }
+            }
+            else
+            {
+                List<CarefulBitesAPI.Item> temp;
+                if (exact)
+                    temp = _manager.GetFoodItems(out foundfood, index).ToList();
+                else
+                    temp = _manager.GetFoodItems(out foundfood, storList[(int)(index % storList.GetLength(1))].ItemStorageId).ToList();
+
                 if (foundfood)
                     foods.AddRange(temp);
             }
-            if(foods.Count()>0)
+            if (foods.Count()>0)
                 return foods;
 
             return NotFound();
