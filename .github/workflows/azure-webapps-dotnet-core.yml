@@ -26,7 +26,9 @@ env:
 
 on:
   push:
-  pull_request:
+  pull_request_target:
+    types:
+      - closed
     branches: [ "master" ]
   workflow_dispatch:
 
@@ -76,8 +78,9 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
+          
+  if_merged:
+    if: github.event.pull_request.merged == true
     permissions:
       contents: none
     runs-on: ubuntu-latest
