@@ -6,14 +6,14 @@ using Newtonsoft.Json.Serialization;
 
 namespace CarefulBitesAPITests {
     public class UnitTests {
-        private CarefulBitesManager _manager = new CarefulBitesManager(new FakeCarefulBitesDbContext());
+        private readonly CarefulBitesManager _manager = new(new FakeCarefulBitesDbContext());
 
         #region FoodItems
         [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems(out _));
 
-            var testItem = new Item() {
+            var testItem = new Item {
                 ItemId = 7,
                 Name = "CoolPeanuts",
                 Amount = 3,
@@ -48,7 +48,7 @@ namespace CarefulBitesAPITests {
 
         [Fact]
         public void TestPostFoodItemAndPatchFoodItem() {
-            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+            Assert.Empty(_manager.GetFoodItems(out _));
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -61,7 +61,7 @@ namespace CarefulBitesAPITests {
             };
 
             _manager.PostFoodItem(testItem);
-
+            bool foundFood;
             Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
 
             Assert.False(foundFood);
@@ -72,7 +72,7 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal(testItem, _manager.GetFoodItem(7));
 
-            var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new Operation<Item>("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
 
             _manager.PatchFoodItem(7, jsonPatch);
 
@@ -83,7 +83,7 @@ namespace CarefulBitesAPITests {
         public void TestPatchFoodItemNotFound() {
             Assert.Empty(_manager.GetFoodItems(out _));
 
-            var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new Operation<Item>("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<Item>(new List<Operation<Item>>() { new("replace", "/name", "", "CoolerPeanuts") }, new DefaultContractResolver());
 
             var error = _manager.PatchFoodItem(7, jsonPatch);
 
@@ -181,7 +181,7 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal(testUser, _manager.GetUser(7));
 
-            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new Operation<User>("replace", "/username", "", "Larry"), new Operation<User>("replace", "/password", "", "12345") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<User>(new List<Operation<User>>() { new("replace", "/username", "", "Larry"), new("replace", "/password", "", "12345") }, new DefaultContractResolver());
 
             _manager.PatchUser(7, jsonPatch);
 
@@ -301,7 +301,7 @@ namespace CarefulBitesAPITests {
 
             Assert.Equal(testItemStorage, _manager.GetItemStorage(7));
 
-            var jsonPatch = new JsonPatchDocument<ItemStorage>(new List<Operation<ItemStorage>>() { new Operation<ItemStorage>("replace", "/name", "", "MyTummy") }, new DefaultContractResolver());
+            var jsonPatch = new JsonPatchDocument<ItemStorage>(new List<Operation<ItemStorage>>() { new("replace", "/name", "", "MyTummy") }, new DefaultContractResolver());
 
             _manager.PatchItemStorage(7, jsonPatch);
 

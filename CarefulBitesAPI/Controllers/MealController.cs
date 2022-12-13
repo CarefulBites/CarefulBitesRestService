@@ -34,7 +34,7 @@ namespace CarefulBitesAPI.Controllers {
                 count = 1;
 
             if (count != null) {
-                List<string> ingredients = _manager.GetRandomIngreds(count.Value + 1);
+                List<string> ingredients = _manager.GetRandomIngredients(count.Value + 1);
                 Random rand = new Random();
 
                 // Making a loop that runs till successful data is found equal to count

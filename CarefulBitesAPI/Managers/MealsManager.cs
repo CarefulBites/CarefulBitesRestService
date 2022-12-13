@@ -1,53 +1,45 @@
 ﻿using CarefulBitesAPI.Models;
 using CarefulBitesAPI.Retrievers;
-using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CarefulBitesAPI.Managers
-{
-    public class MealsManager
-    {
-        public List<TempMeal>? GetFood(string ingredient)
-        {
+namespace CarefulBitesAPI.Managers {
+    public class MealsManager {
+        public List<TempMeal>? GetFood(string ingredient) {
             var food = MealRetriever.GetMealsByIngredientsAsync(ingredient);
 
             return food.Result;
         }
 
-        public MealById? GetFoodById(string id)
-        {
+        public MealById? GetFoodById(string id) {
             var foodById = MealRetriever.GetMealsByIdAsync(id);
 
             return foodById.Result;
         }
-        public List<MealIngredient>? GetIngredients()
-        {
+
+        public List<MealIngredient>? GetIngredients() {
             var ingredientById = MealRetriever.GetIngredientsAsync();
             return ingredientById.Result;
         }
-        public List<string> GetRandomIngreds(int count)
-        {
-            List<string> ingrilist = new List<string>();
+
+        public List<string> GetRandomIngredients(int count) {
+            List<string> ingredientList = new List<string>();
 
             var ingredientById = MealRetriever.GetIngredientsAsync();
-            List<MealIngredient>? ingByid = ingredientById.Result;
+            List<MealIngredient>? ingById = ingredientById.Result;
 
-            if (ingByid == null) return ingrilist;
-      
+            if (ingById == null) return ingredientList;
 
             Random rand = new Random();
-       
-            for (int i = 0; i < count; i++)
-            {
-                int index = (int)rand.Next(ingByid.Count);
-                string? str = ingByid[index].strIngredient;
-                if (str != null)
-                    ingrilist.Add(str);
 
-                ingByid.RemoveAt(index);
+            for (int i = 0; i < count; i++) {
+                int index = rand.Next(ingById.Count);
+                string? str = ingById[index].strIngredient;
+                if (str != null)
+                    ingredientList.Add(str);
+
+                ingById.RemoveAt(index);
             }
 
-            return ingrilist;
+            return ingredientList;
         }
     }
 }

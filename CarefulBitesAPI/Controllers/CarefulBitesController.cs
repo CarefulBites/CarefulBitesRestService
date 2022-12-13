@@ -1,8 +1,6 @@
 using CarefulBitesAPI.Managers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
@@ -103,21 +101,19 @@ namespace CarefulBitesAPI.Controllers {
                 return NotFound();
 
             var itemStorages = _manager.GetItemStorages(user.UserId);
-            ItemStorage[] storList = itemStorages.ToArray();
-            List<CarefulBitesAPI.Item> foods = new List<CarefulBitesAPI.Item>();
-            bool foundfood = false;
+            var enumerable = itemStorages as ItemStorage[] ?? itemStorages.ToArray();
+            ItemStorage[] storList = enumerable.ToArray();
+            List<Item> foods = new List<Item>();
+            bool foundfood;
 
             if (index == null) {
-
-                foreach (var stor in itemStorages) {
-                    List<CarefulBitesAPI.Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
+                foreach (var stor in enumerable) {
+                    List<Item> temp = _manager.GetFoodItems(out foundfood, stor.ItemStorageId).ToList();
                     if (foundfood)
                         foods.AddRange(temp);
                 }
-            }
-            else
-            {
-                List<CarefulBitesAPI.Item> temp;
+            } else {
+                List<Item> temp;
                 if (exact)
                     temp = _manager.GetFoodItems(out foundfood, index).ToList();
                 else
@@ -126,7 +122,7 @@ namespace CarefulBitesAPI.Controllers {
                 if (foundfood)
                     foods.AddRange(temp);
             }
-            if (foods.Count()>0)
+            if (foods.Count > 0)
                 return foods;
 
             return NotFound();
