@@ -38,26 +38,22 @@ namespace CarefulBitesAPI.Retrievers {
             return null;
         }
 
-        public static async Task<List<MealIngredient>?> GetIngredientsAsync()
-        {
+        public static async Task<List<MealIngredient>?> GetIngredientsAsync() {
             var response = await Client.GetAsync(Path + $"list.php?i=list");
             MealIngredientList? mealIngredient = null;
 
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 mealIngredient = await response.Content.ReadFromJsonAsync<MealIngredientList>();
             }
 
             var mealList = new List<MealIngredient>();
             if (mealIngredient != null)
                 if (mealIngredient.Ingredients != null)
-                    foreach (var tm in mealIngredient.Ingredients)
-                    {
+                    foreach (var tm in mealIngredient.Ingredients) {
                         mealList.Add(tm);
                     }
 
             return mealList;
         }
-
     }
 }

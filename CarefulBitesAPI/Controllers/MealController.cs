@@ -1,12 +1,12 @@
 ﻿using CarefulBitesAPI.Managers;
-using Microsoft.AspNetCore.Mvc;
 using CarefulBitesAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class MealController : Controller {
-        private readonly MealsManager _manager = new MealsManager();
+        private readonly MealsManager _manager = new();
 
         // GET: MealController
         [HttpGet]
@@ -35,12 +35,12 @@ namespace CarefulBitesAPI.Controllers {
 
             if (count != null) {
                 List<string> ingredients = _manager.GetRandomIngredients(count.Value + 1);
-                Random rand = new Random();
+                Random rand = new();
 
                 // Making a loop that runs till successful data is found equal to count
                 int test = 0;
                 int successEntries = 0;
-                List<TempMeal> result = new List<TempMeal>();
+                List<TempMeal> result = new();
                 while (test >= count) {
                     if (successEntries > count)
                         break;

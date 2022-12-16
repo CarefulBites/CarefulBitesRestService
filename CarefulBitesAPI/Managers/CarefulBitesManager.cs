@@ -26,7 +26,7 @@ namespace CarefulBitesAPI.Managers {
             foundFood = itemStorageId != null;
             if (itemStorageId != null)
                 foodItemList = foodItemList.FindAll(fI => fI.ItemStorageId.Equals(itemStorageId));
-       
+
             return foodItemList;
         }
 
@@ -97,27 +97,25 @@ namespace CarefulBitesAPI.Managers {
         public ClientError? PatchUser(int userId, JsonPatchDocument<User> value) {
             var user = _dbContext.Users.Find(userId);
 
-            if (user != null) {
-                value.ApplyTo(user);
-                _dbContext.SaveChanges();
+            if (user == null)
+                return ClientError.NotFound;
 
-                return null;
-            }
+            value.ApplyTo(user);
+            _dbContext.SaveChanges();
 
-            return ClientError.NotFound;
+            return null;
         }
 
         public ClientError? DeleteUser(int userId) {
             var user = _dbContext.Users.Find(userId);
 
-            if (user != null) {
-                _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
+            if (user == null)
+                return ClientError.NotFound;
 
-                return null;
-            }
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
 
-            return ClientError.NotFound;
+            return null;
         }
         #endregion
 
@@ -148,14 +146,13 @@ namespace CarefulBitesAPI.Managers {
         public ClientError? PatchItemStorage(int itemStorageId, JsonPatchDocument<ItemStorage> value) {
             var itemStorage = _dbContext.ItemStorages.Find(itemStorageId);
 
-            if (itemStorage != null) {
-                value.ApplyTo(itemStorage);
-                _dbContext.SaveChanges();
+            if (itemStorage == null)
+                return ClientError.NotFound;
 
-                return null;
-            }
+            value.ApplyTo(itemStorage);
+            _dbContext.SaveChanges();
 
-            return ClientError.NotFound;
+            return null;
         }
 
         public ClientError? DeleteItemStorage(int itemStorageId) {
