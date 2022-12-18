@@ -1,7 +1,5 @@
-﻿namespace CarefulBitesAPI.Models
-{
-    public class MealIngredient
-    {
+﻿namespace CarefulBitesAPI.Models {
+    public class MealIngredient {
         public string? idIngredient { get; set; }
         public string? strIngredient { get; set; }
         public string? strDescription { get; set; }

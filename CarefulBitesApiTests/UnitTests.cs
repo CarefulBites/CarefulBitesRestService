@@ -61,8 +61,7 @@ namespace CarefulBitesAPITests {
             };
 
             _manager.PostFoodItem(testItem);
-            bool foundFood;
-            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
+            Assert.NotEmpty(_manager.GetFoodItems(out var foundFood));
 
             Assert.False(foundFood);
 
@@ -92,7 +91,7 @@ namespace CarefulBitesAPITests {
 
         [Fact]
         public void TestGetFoodItemsByItemStorageId() {
-            Assert.Empty(_manager.GetFoodItems(out bool foundFood));
+            Assert.Empty(_manager.GetFoodItems(out _));
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -127,15 +126,15 @@ namespace CarefulBitesAPITests {
             _manager.PostFoodItem(testItem);
             _manager.PostFoodItem(testItem2);
             _manager.PostFoodItem(testItem3);
-          
-            Assert.NotEmpty(_manager.GetFoodItems(out foundFood));
 
-            Assert.Equal(3, _manager.GetFoodItems(out foundFood).Count());
+            Assert.NotEmpty(_manager.GetFoodItems(out _));
+
+            Assert.Equal(3, _manager.GetFoodItems(out var foundFood).Count());
             Assert.False(foundFood);
 
             Assert.Single(_manager.GetFoodItems(out foundFood, itemStorageId: 8));
             Assert.True(foundFood);
-            Assert.Equal(2, _manager.GetFoodItems(out foundFood,itemStorageId: 7).Count());
+            Assert.Equal(2, _manager.GetFoodItems(out foundFood, itemStorageId: 7).Count());
 
             Assert.True(foundFood);
         }
