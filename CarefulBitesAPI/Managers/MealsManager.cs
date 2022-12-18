@@ -21,14 +21,14 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public List<string> GetRandomIngredients(int count) {
-            List<string> ingredientList = new List<string>();
+            List<string> ingredientList = new();
 
             var ingredientById = MealRetriever.GetIngredientsAsync();
             List<MealIngredient>? ingById = ingredientById.Result;
 
             if (ingById == null) return ingredientList;
 
-            Random rand = new Random();
+            Random rand = new();
 
             for (int i = 0; i < count; i++) {
                 int index = rand.Next(ingById.Count);

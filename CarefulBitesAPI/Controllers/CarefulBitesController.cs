@@ -1,6 +1,6 @@
 using CarefulBitesAPI.Managers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
@@ -8,13 +8,13 @@ namespace CarefulBitesAPI.Controllers {
     public class CarefulBitesController : ControllerBase {
 
 #if DEBUG
-        private readonly Uri _baseUri = new Uri("https://localhost:7116/CarefulBites/");
+        private readonly Uri _baseUri = new("https://localhost:7116/CarefulBites/");
 #endif
 #if RELEASE
-        private readonly Uri _baseUri = new Uri("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
+        private readonly Uri _baseUri = new("https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/");
 #endif
 
-        private readonly CarefulBitesManager _manager = new CarefulBitesManager(new CarefulBitesDbContext());
+        private readonly CarefulBitesManager _manager = new(new CarefulBitesDbContext());
 
         #region foodItems
         [HttpGet("foodItems", Name = "GetFoodItems")]
@@ -30,11 +30,10 @@ namespace CarefulBitesAPI.Controllers {
         [HttpGet("randomFood", Name = "GetRandomFood")]
         public ActionResult<IEnumerable<Item>> GetRandomFood([FromQuery] int? number = null) {
             List<Item> allFoods = _manager.GetFoodItems(out _).ToList();
-            Random rand = new Random();
-            if (number == null)
-                number = 1;
+            Random rand = new();
+            number ??= 1;
 
-            List<Item> outList = new List<Item>();
+            List<Item> outList = new();
             for (int i = 0; i < number; i++) {
                 int id = rand.Next(allFoods.Count);
                 outList.Add(allFoods[id]);
@@ -69,28 +68,22 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult PatchFoodItem(int itemId, [FromBody] JsonPatchDocument<Item> value) {
             var error = _manager.PatchFoodItem(itemId, value);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
         }
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
             var error = _manager.DeleteFoodItem(itemId);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
         }
 
         [HttpGet("usersFood/{userId}", Name = "GetUsersFood")]
@@ -103,7 +96,7 @@ namespace CarefulBitesAPI.Controllers {
             var itemStorages = _manager.GetItemStorages(user.UserId);
             var enumerable = itemStorages as ItemStorage[] ?? itemStorages.ToArray();
             ItemStorage[] storList = enumerable.ToArray();
-            List<Item> foods = new List<Item>();
+            List<Item> foods = new();
             bool foundfood;
 
             if (index == null) {
@@ -157,42 +150,33 @@ namespace CarefulBitesAPI.Controllers {
 
             var createdUserTuple = _manager.PostUser(user);
 
-            switch (createdUserTuple.error) {
-                case null:
-                    return Created(new Uri(_baseUri, $"users/{createdUserTuple.user?.UserId}"), createdUserTuple.user);
-                case ClientError.Conflict:
-                    return Conflict();
-                default:
-                    return BadRequest();
-            }
+            return createdUserTuple.error switch {
+                null => Created(new Uri(_baseUri, $"users/{createdUserTuple.user?.UserId}"), createdUserTuple.user),
+                ClientError.Conflict => Conflict(),
+                _ => BadRequest()
+            };
         }
 
         [HttpPatch("users/{userId}", Name = "PatchUser")]
         public ActionResult PatchUser(int userId, [FromBody] JsonPatchDocument<User> value) {
             var error = _manager.PatchUser(userId, value);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
         }
 
         [HttpDelete("users/{userId}", Name = "DeleteUser")]
         public ActionResult DeleteUser(int userId) {
             var error = _manager.DeleteUser(userId);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
         }
         #endregion
 
@@ -229,30 +213,23 @@ namespace CarefulBitesAPI.Controllers {
         public ActionResult PatchItemStorage(int itemStorageId, [FromBody] JsonPatchDocument<ItemStorage> value) {
             var error = _manager.PatchItemStorage(itemStorageId, value);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
         public ActionResult DeleteItemStorage(int itemStorageId) {
             var error = _manager.DeleteItemStorage(itemStorageId);
 
-            switch (error) {
-                case null:
-                    return NoContent();
-                case ClientError.NotFound:
-                    return NotFound();
-                case ClientError.Conflict:
-                    return Conflict();
-                default:
-                    return BadRequest();
-            }
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                ClientError.Conflict => Conflict(),
+                _ => BadRequest()
+            };
         }
         #endregion
     }
