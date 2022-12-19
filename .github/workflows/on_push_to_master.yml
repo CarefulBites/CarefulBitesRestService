@@ -22,6 +22,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Send request to API to ensure DB is awake
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://carefulbitesapi20221128134821.azurewebsites.net/CarefulBites/foodItems'
+          method: 'GET'
+          customHeaders: '{"Content-Type": "application/json"}'
+          retry_on: error
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v2
         with:
@@ -34,6 +42,7 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+            
       - name: Build with dotnet
         run: dotnet build --configuration Release
         
@@ -48,6 +57,7 @@ jobs:
              dotnet run --project "./CarefulBitesAPI" &
              sleep 10
              newman run "testSuite.postman_collection.json" --insecure
+             
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
