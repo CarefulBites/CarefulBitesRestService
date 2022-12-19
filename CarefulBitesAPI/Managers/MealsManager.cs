@@ -20,26 +20,11 @@ namespace CarefulBitesAPI.Managers {
             return ingredientById.Result;
         }
 
-        public List<string> GetRandomIngredients(int count) {
-            List<string> ingredientList = new();
+        public List<TempMeal>? GetRandomMeals(int amountOfMeals)
+        {
+            var food = MealRetriever.GetRandomMealsAsync(amountOfMeals);
 
-            var ingredientById = MealRetriever.GetIngredientsAsync();
-            List<MealIngredient>? ingById = ingredientById.Result;
-
-            if (ingById == null) return ingredientList;
-
-            Random rand = new();
-
-            for (int i = 0; i < count; i++) {
-                int index = rand.Next(ingById.Count);
-                string? str = ingById[index].strIngredient;
-                if (str != null)
-                    ingredientList.Add(str);
-
-                ingById.RemoveAt(index);
-            }
-
-            return ingredientList;
+            return food.Result;
         }
     }
 }

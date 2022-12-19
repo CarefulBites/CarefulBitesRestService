@@ -5,6 +5,7 @@ namespace CarefulBitesAPI.Retrievers {
     public class MealRetriever {
         private static readonly HttpClient Client = new();
         private const string Path = "https://www.themealdb.com/api/json/v1/1/";
+        private const string PathV2 = "https://www.themealdb.com/api/json/v2/9973533/";
 
         public static async Task<List<TempMeal>?> GetMealsByIngredientsAsync(string ingredient) {
             var response = await Client.GetAsync(Path + $"filter.php?i={ingredient}");
@@ -53,6 +54,30 @@ namespace CarefulBitesAPI.Retrievers {
                         mealList.Add(tm);
                     }
 
+            return mealList;
+        }
+
+        public static async Task<List<TempMeal>?> GetRandomMealsAsync(int amountOfMeals)
+        {
+            if (amountOfMeals > 10 || amountOfMeals < 0)
+            {
+                amountOfMeals = 10;
+            }
+            var response = await Client.GetAsync(PathV2 + "randomselection.php");
+            TempMealList? tempMealList = null;
+
+            if (!response.IsSuccessStatusCode) return null;
+            tempMealList = await response.Content.ReadFromJsonAsync<TempMealList>();
+            
+
+            var mealList = new List<TempMeal>();
+            if (tempMealList == null) return mealList;
+            if (tempMealList.Meals == null) return mealList;
+            for (var index = 0; index < amountOfMeals; index++)
+            {
+                var tm = tempMealList.Meals[index];
+                mealList.Add(tm);
+            }
             return mealList;
         }
     }
