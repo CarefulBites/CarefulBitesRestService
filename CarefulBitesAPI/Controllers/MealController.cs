@@ -28,36 +28,13 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("RandomMeals")]  // Pretty sure it has a bug or 2 but might work
-        public ActionResult GetRandomMeals([FromQuery] int? count = null) {
-            if (count < 1)
-                count = 1;
+        [HttpGet("RandomMeals")]
+        public ActionResult GetRandomMeals([FromQuery] int amountOfMeals)
+        {
+            var meals = _manager.GetRandomMeals(amountOfMeals);
 
-            if (count != null) {
-                List<string> ingredients = _manager.GetRandomIngredients(count.Value + 1);
-                Random rand = new();
-
-                // Making a loop that runs till successful data is found equal to count
-                int test = 0;
-                int successEntries = 0;
-                List<TempMeal> result = new();
-                while (test >= count) {
-                    if (successEntries > count)
-                        break;
-
-                    List<TempMeal>? meals = _manager.GetFood(ingredients[test]);
-                    test++;
-                    if (meals != null) {
-                        successEntries++;
-                        int index = rand.Next(meals.Count);
-                        result.Add(meals[index]);
-                    }
-                }
-
-                if (successEntries >= count) {
-                    return Ok(result);
-                }
-            }
+            if (meals != null && meals.Any())
+                return Ok(meals);
 
             return NoContent();
         }
