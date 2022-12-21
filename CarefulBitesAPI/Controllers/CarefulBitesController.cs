@@ -116,7 +116,7 @@ namespace CarefulBitesAPI.Controllers {
                     foods.AddRange(temp);
 
             }
-            if (foods.Count > 0)
+            if (foods.Count >= 0)
                 return foods;
 
             return NotFound();
