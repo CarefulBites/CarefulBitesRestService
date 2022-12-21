@@ -7,9 +7,10 @@ using Newtonsoft.Json.Serialization;
 namespace CarefulBitesAPITests {
     public class UnitTests {
         private readonly CarefulBitesManager _manager = new(new FakeCarefulBitesDbContext());
+        private readonly MealsManager _mealsManager = new();
 
         #region FoodItems
-        [Fact]
+       [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems(out _));
 
@@ -345,5 +346,46 @@ namespace CarefulBitesAPITests {
             Assert.Equal(ClientError.Conflict, error);
         }
         #endregion
+
+        [Fact]
+        public void TestGetRandomMeals()
+        {
+            //arrange
+            var randomImages = 5;
+
+            //act
+            var result = _mealsManager.GetRandomMeals(randomImages);
+
+            //assert
+            Assert.Equal(5, result.Count);
+        }
+
+        [Fact]
+        public void TestGetMealsById()
+        {
+            //arrange
+            var mealId = "53016";
+
+            //act
+            var result = _mealsManager.GetFoodById(mealId);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.StrMeal.Equals("Chick-Fil-A Sandwich"));
+        }
+
+        [Fact]
+        public void TestGetMealsByIngredient()
+        {
+            //arrange
+            var ingredient = "Milk";
+
+            //act
+            var result = _mealsManager.GetFood(ingredient);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.Count > 0);
+        }
     }
 }
