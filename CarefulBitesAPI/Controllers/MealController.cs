@@ -10,8 +10,10 @@ namespace CarefulBitesAPI.Controllers {
 
         // GET: MealController
         [HttpGet]
-        public ActionResult GetMeals([FromQuery] string ingredient) {
-            var meals = _manager.GetFood(ingredient);
+        public ActionResult GetMeals([FromQuery] List<string> ingredient)
+        {
+            var ingredients = string.Join(",", ingredient);
+            var meals = _manager.GetFood(ingredients);
 
             if (meals != null && meals.Any())
                 return Ok(meals);

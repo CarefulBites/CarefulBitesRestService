@@ -8,7 +8,7 @@ namespace CarefulBitesAPI.Retrievers {
         private const string PathV2 = "https://www.themealdb.com/api/json/v2/9973533/";
 
         public static async Task<List<TempMeal>?> GetMealsByIngredientsAsync(string ingredient) {
-            var response = await Client.GetAsync(Path + $"filter.php?i={ingredient}");
+            var response = await Client.GetAsync(PathV2 + $"filter.php?i={ingredient}");
             TempMealList? tempMealList = null;
 
             if (response.IsSuccessStatusCode) {
