@@ -1345,7 +1345,26 @@
 					"name": "Test Get Random Meals",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/Meal/RandomMeals?amountOfMeals=3",
+							"protocol": "https",
+							"host": [
+								"carefulbitesapi20221128134821",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"Meal",
+								"RandomMeals"
+							],
+							"query": [
+								{
+									"key": "amountOfMeals",
+									"value": "3"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -1353,7 +1372,26 @@
 					"name": "Test Get Meal By Id",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/Meal/foodById?id=52772",
+							"protocol": "https",
+							"host": [
+								"carefulbitesapi20221128134821",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"Meal",
+								"foodById"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "52772"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -1363,7 +1401,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/Meal?ingredient=MIlk",
+							"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/Meal?ingredient=Milk",
 							"protocol": "https",
 							"host": [
 								"carefulbitesapi20221128134821",
@@ -1376,7 +1414,7 @@
 							"query": [
 								{
 									"key": "ingredient",
-									"value": "MIlk"
+									"value": "Milk"
 								}
 							]
 						}
