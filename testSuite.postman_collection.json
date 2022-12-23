@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "a85170e3-4e68-45b6-a1b9-1ba97aa11821",
+		"_postman_id": "530be92c-5c54-4d06-9e77-f32b098643e4",
 		"name": "testSuite",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18242926"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1332,6 +1331,53 @@
 								"CarefulBites",
 								"itemStorages",
 								"{{testItemStorageId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MealAPI",
+			"item": [
+				{
+					"name": "Test Get Random Meals",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Test Get Meal By Id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Test Get meal by ingredient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://carefulbitesapi20221128134821.azurewebsites.net/Meal?ingredient=MIlk",
+							"protocol": "https",
+							"host": [
+								"carefulbitesapi20221128134821",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"Meal"
+							],
+							"query": [
+								{
+									"key": "ingredient",
+									"value": "MIlk"
+								}
 							]
 						}
 					},
