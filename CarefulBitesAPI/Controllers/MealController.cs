@@ -39,8 +39,7 @@ namespace CarefulBitesAPI.Controllers {
                 return Ok(meals);
 
             return NoContent();
-                */
 
-            }
         }
+    }
 }
