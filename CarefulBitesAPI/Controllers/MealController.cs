@@ -1,17 +1,19 @@
 ﻿using CarefulBitesAPI.Managers;
-using Microsoft.AspNetCore.Mvc;
 using CarefulBitesAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class MealController : Controller {
-        private readonly MealsManager _manager = new MealsManager();
+        private readonly MealsManager _manager = new();
 
         // GET: MealController
         [HttpGet]
-        public ActionResult GetMeals([FromQuery] string ingredient) {
-            var meals = _manager.GetFood(ingredient);
+        public ActionResult GetMeals([FromQuery] List<string> ingredient)
+        {
+            var ingredients = string.Join(",", ingredient);
+            var meals = _manager.GetFood(ingredients);
 
             if (meals != null && meals.Any())
                 return Ok(meals);
@@ -28,36 +30,14 @@ namespace CarefulBitesAPI.Controllers {
             return NoContent();
         }
 
-        [HttpGet("RandomMeals")]  // Pretty sure it has a bug or 2 but might work
-        public ActionResult GetRandomMeals([FromQuery] int count = 1) {
-            
-                List<string> ingredients = _manager.GetRandomIngreds(count);
-                return Ok(ingredients);
-                /*
-                Random rand = new Random();
+        [HttpGet("RandomMeals")]
+        public ActionResult GetRandomMeals([FromQuery] int amountOfMeals)
+        {
+            var meals = _manager.GetRandomMeals(amountOfMeals);
 
-                // Making a loop that runs till successful data is found equal to count
-                int index = 0;
-                int successEntries = 0;
-                List<TempMeal> result = new List<TempMeal>();
-                while (index >= count) {
-                    if (successEntries > count)
-                        break;
+            if (meals != null && meals.Any())
+                return Ok(meals);
 
-                    List<TempMeal>? meals = _manager.GetFood(ingredients[index]);
-                    index++;
-                    if (meals != null) {
-                        successEntries++;
-                        int randind = rand.Next(meals.Count-1);
-                        result.Add(meals[randind]);
-                    }
-                }
-
-                if (successEntries >= count) {
-                    return Ok(result);
-                }
-           
-            }
             return NoContent();
                 */
 
