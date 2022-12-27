@@ -1171,7 +1171,7 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Parent ItemStorage pointed by [Items].([ItemStorageId]) (FK__Items__ItemStora__70DDC3D8)
         /// </summary>
-        public virtual ItemStorage ItemStorage { get; set; } // FK__Items__ItemStora__70DDC3D8
+        //public virtual ItemStorage ItemStorage { get; set; } // FK__Items__ItemStora__70DDC3D8
     }
 
     // ItemStorage
@@ -1186,18 +1186,18 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Child Items where [Items].[ItemStorageId] point to this entity (FK__Items__ItemStora__70DDC3D8)
         /// </summary>
-        public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemStora__70DDC3D8
+        //public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemStora__70DDC3D8
 
         // Foreign keys
 
         /// <summary>
         /// Parent User pointed by [ItemStorage].([UserId]) (FK__ItemStora__UserI__6477ECF3)
         /// </summary>
-        public virtual User User { get; set; } // FK__ItemStora__UserI__6477ECF3
+        //public virtual User User { get; set; } // FK__ItemStora__UserI__6477ECF3
 
         public ItemStorage()
         {
-            Items = new List<Item>();
+            //Items = new List<Item>();
         }
     }
 
@@ -1225,11 +1225,11 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Child ItemStorages where [ItemStorage].[UserId] point to this entity (FK__ItemStora__UserI__6477ECF3)
         /// </summary>
-        public virtual ICollection<ItemStorage> ItemStorages { get; set; } // ItemStorage.FK__ItemStora__UserI__6477ECF3
+        //public virtual ICollection<ItemStorage> ItemStorages { get; set; } // ItemStorage.FK__ItemStora__UserI__6477ECF3
 
         public User()
         {
-            ItemStorages = new List<ItemStorage>();
+            //ItemStorages = new List<ItemStorage>();
         }
     }
 
@@ -1261,7 +1261,7 @@ namespace CarefulBitesAPI
             builder.Property(x => x.DaysAfterOpen).HasColumnName(@"DaysAfterOpen").HasColumnType("int").IsRequired(false);
 
             // Foreign keys
-            builder.HasOne(a => a.ItemStorage).WithMany(b => b.Items).HasForeignKey(c => c.ItemStorageId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Items__ItemStora__70DDC3D8");
+            //builder.HasOne(a => a.ItemStorage).WithMany(b => b.Items).HasForeignKey(c => c.ItemStorageId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Items__ItemStora__70DDC3D8");
         }
     }
 
@@ -1278,7 +1278,7 @@ namespace CarefulBitesAPI
             builder.Property(x => x.UserId).HasColumnName(@"UserId").HasColumnType("int").IsRequired();
 
             // Foreign keys
-            builder.HasOne(a => a.User).WithMany(b => b.ItemStorages).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemStora__UserI__6477ECF3");
+            //builder.HasOne(a => a.User).WithMany(b => b.ItemStorages).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemStora__UserI__6477ECF3");
         }
     }
 
