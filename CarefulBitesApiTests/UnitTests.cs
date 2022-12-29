@@ -342,8 +342,8 @@ namespace CarefulBitesAPITests {
             _manager.PostFoodItem(testItem);
 
             var error = _manager.DeleteItemStorage(7);
-
-            Assert.Equal(ClientError.Conflict, error);
+            var itemStorage = _manager.GetItemStorages(7).FirstOrDefault();
+            Assert.Null(itemStorage);
         }
         #endregion
 

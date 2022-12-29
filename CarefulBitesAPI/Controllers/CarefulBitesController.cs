@@ -221,7 +221,11 @@ namespace CarefulBitesAPI.Controllers {
         }
 
         [HttpDelete("itemStorages/{itemStorageId}", Name = "DeleteItemStorage")]
-        public ActionResult DeleteItemStorage(int itemStorageId) {
+        public ActionResult DeleteItemStorage(int itemStorageId,[FromQuery] int destinationId = -1) {
+            if (destinationId != -1)
+            {
+                _manager.MoveItems(itemStorageId, destinationId);
+            }
             var error = _manager.DeleteItemStorage(itemStorageId);
 
             return error switch {

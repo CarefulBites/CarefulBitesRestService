@@ -160,13 +160,31 @@ namespace CarefulBitesAPI.Managers {
 
             if (itemStorage == null)
                 return ClientError.NotFound;
-            if (GetFoodItems(out _, itemStorageId).ToList().Count != 0)
-                return ClientError.Conflict;
-
+            var itemStorageList = GetFoodItems(out _, itemStorageId).ToList();
+            if (itemStorageList.Count != 0)
+            {
+                foreach (var item in itemStorageList)
+                {
+                    _dbContext.Items.Remove(item);
+                }
+                _dbContext.SaveChanges();
+            }
             _dbContext.ItemStorages.Remove(itemStorage);
             _dbContext.SaveChanges();
 
             return null;
+        }
+
+        public void MoveItems(int originId, int destinationId)
+        {
+            var itemStorageList = GetFoodItems(out _, originId).ToList();
+
+            if (itemStorageList.Count == 0) return;
+            foreach (var item in itemStorageList)
+            {
+                item.ItemStorageId = destinationId;
+            }
+            _dbContext.SaveChanges();
         }
         #endregion
     }
