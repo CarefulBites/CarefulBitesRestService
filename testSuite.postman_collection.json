@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "530be92c-5c54-4d06-9e77-f32b098643e4",
+		"_postman_id": "94caf518-473f-4c02-9a2c-d5c349635560",
 		"name": "testSuite",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17444428"
 	},
 	"item": [
 		{
@@ -1422,6 +1423,303 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "itemStorages2",
+			"item": [
+				{
+					"name": "Add Storage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"testItemStorageId2\", pm.response.json()[\"itemStorageId\"]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test2ItemStorage\",\r\n    \"userId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post item to storage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"brandnewtestId2\", pm.response.json()[\"itemId\"]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"brandnewtest2\",\r\n        \"caloriesPer\": null,\r\n        \"expirationDate\": \"2022-12-01T00:00:00\",\r\n        \"itemStorageId\": {{testItemStorageId2}},\r\n        \"amount\": 4200,\r\n        \"unit\": 1,\r\n        \"openDate\": \"2022-12-04T00:00:00\",\r\n        \"daysAfterOpen\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/foodItems",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"foodItems"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Destination Storage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"moveToMeStorage\", pm.response.json()[\"itemStorageId\"]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"MoveToMeStorage\",\r\n    \"userId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test delete move items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 204\", function(){\r",
+									"    pm.response.to.have.status(204)\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/{{testItemStorageId2}}?destinationId={{moveToMeStorage}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"{{testItemStorageId2}}"
+							],
+							"query": [
+								{
+									"key": "destinationId",
+									"value": "{{moveToMeStorage}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get item in new storage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"itemStorageId is of destination\", function(){\r",
+									"    pm.expect(pm.response.json()[\"itemStorageId\"]).to.eql(pm.collectionVariables.get(\"moveToMeStorage\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/foodItems/{{brandnewtestId2}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"foodItems",
+								"{{brandnewtestId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test delete all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 204\", function(){\r",
+									"    pm.response.to.have.status(204)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/itemStorages/{{moveToMeStorage}}?destinationId=-1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"itemStorages",
+								"{{moveToMeStorage}}"
+							],
+							"query": [
+								{
+									"key": "destinationId",
+									"value": "-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test item is deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Test is status code 404\", function(){\r",
+									"    pm.response.to.have.status(404)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7116/CarefulBites/foodItems/{{brandnewtestId2}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7116",
+							"path": [
+								"CarefulBites",
+								"foodItems",
+								"{{brandnewtestId2}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
@@ -1439,6 +1737,18 @@
 		},
 		{
 			"key": "testItemStorageId",
+			"value": ""
+		},
+		{
+			"key": "testItemStorageId2",
+			"value": ""
+		},
+		{
+			"key": "moveToMeStorage",
+			"value": ""
+		},
+		{
+			"key": "brandnewtestId2",
 			"value": ""
 		}
 	]
