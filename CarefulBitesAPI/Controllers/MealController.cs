@@ -1,5 +1,4 @@
 ﻿using CarefulBitesAPI.Managers;
-using CarefulBitesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarefulBitesAPI.Controllers {
