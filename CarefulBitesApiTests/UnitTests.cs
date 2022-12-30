@@ -318,16 +318,22 @@ namespace CarefulBitesAPITests {
         }
 
         [Fact]
-        public void TestDeleteItemStorageConflict() {
-            Assert.Empty(_manager.GetItemStorages());
-
-            var testItemStorage = new ItemStorage() {
+        public void TestMoveItems() {
+            var testItemStorage1 = new ItemStorage() {
                 Name = "TheDump",
                 UserId = 7,
                 ItemStorageId = 7
             };
 
-            _manager.PostItemStorage(testItemStorage);
+            _manager.PostItemStorage(testItemStorage1);
+
+            var testItemStorage2 = new ItemStorage() {
+                Name = "TheFreezer",
+                UserId = 7,
+                ItemStorageId = 8
+            };
+
+            _manager.PostItemStorage(testItemStorage2);
 
             var testItem = new Item() {
                 ItemId = 7,
@@ -341,9 +347,13 @@ namespace CarefulBitesAPITests {
 
             _manager.PostFoodItem(testItem);
 
-            var error = _manager.DeleteItemStorage(7);
-            var itemStorage = _manager.GetItemStorages(7).FirstOrDefault();
-            Assert.Null(itemStorage);
+            Assert.Single(_manager.GetFoodItems(out _, 7));
+            Assert.Empty(_manager.GetFoodItems(out _, 8));
+
+            _manager.MoveItems(7, 8);
+
+            Assert.Single(_manager.GetFoodItems(out _, 8));
+            Assert.Empty(_manager.GetFoodItems(out _, 7));
         }
         #endregion
 
@@ -357,6 +367,7 @@ namespace CarefulBitesAPITests {
             var result = _mealsManager.GetRandomMeals(randomImages);
 
             //assert
+            Assert.NotNull(result);
             Assert.Equal(5, result.Count);
         }
 
@@ -371,6 +382,7 @@ namespace CarefulBitesAPITests {
 
             //assert
             Assert.NotNull(result);
+            Assert.NotNull(result.StrMeal);
             Assert.True(result.StrMeal.Equals("Chick-Fil-A Sandwich"));
         }
 
