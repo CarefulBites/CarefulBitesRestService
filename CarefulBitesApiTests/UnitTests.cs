@@ -10,7 +10,7 @@ namespace CarefulBitesAPITests {
         private readonly MealsManager _mealsManager = new();
 
         #region FoodItems
-       [Fact]
+        [Fact]
         public void TestPostFoodItemAndDeleteFoodItem() {
             Assert.Empty(_manager.GetFoodItems(out _));
 

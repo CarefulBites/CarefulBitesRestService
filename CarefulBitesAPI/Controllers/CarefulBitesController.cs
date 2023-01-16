@@ -54,22 +54,23 @@ namespace CarefulBitesAPI.Controllers {
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
-        public ActionResult PostFoodItem([FromBody] (Item foodItem, int[]? categoryIds) tuple)
+        public ActionResult PostFoodItem([FromBody] Tuple<Item, int[]?> tuple)
         {
-            var foodItem = tuple.foodItem;
-            var categoryIds = tuple.categoryIds;
+            tuple.Item1.ItemId = null;
 
-            foodItem.ItemId = null;
-
-            var createdItem = _manager.PostFoodItem(foodItem);
+            var createdItem = _manager.PostFoodItem(tuple.Item1);
 
             if (createdItem != null)
             {
-                if (categoryIds != null)
+                if (tuple.Item2 != null)
                 {
-                    foreach (var categoryId in categoryIds)
+                    foreach (var categoryId in tuple.Item2)
                     {
-                        var newItemCategoryBinding = new ItemCategoryBinding() { CategoryId = categoryId, ItemId = (int)createdItem.ItemId };
+                        var newItemCategoryBinding = new ItemCategoryBinding
+                        {
+                            CategoryId = categoryId,
+                            ItemId = (int)createdItem.ItemId
+                        };
                         _manager.PostItemCategoryBinding(newItemCategoryBinding);
                     }
                 }
