@@ -46,7 +46,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"name\": \"brandnewtest\",\r\n        \"caloriesPer\": null,\r\n        \"expirationDate\": \"2022-12-01T00:00:00\",\r\n        \"itemStorageId\": 2,\r\n        \"amount\": 4200,\r\n        \"unit\": 1,\r\n        \"openDate\": \"2022-12-04T00:00:00\",\r\n        \"daysAfterOpen\": 5\r\n}"
+							"raw": "{\r\n\"item1\": {\r\n\"name\": \"brandnewtest\",\r\n\"caloriesPer\": null,\r\n\"expirationDate\": \"2022-12-01T00:00:00\",\r\n\"itemStorageId\": 2,\r\n\"amount\": 4200,\r\n\"unit\": 1,\r\n\"openDate\": \"2022-12-04T00:00:00\",\r\n\"daysAfterOpen\": 5\r\n},\r\n\"item2\": []\r\n}\r\n"
 						},
 						"url": {
 							"raw": "https://localhost:7116/CarefulBites/foodItems",
@@ -1491,7 +1491,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"name\": \"brandnewtest2\",\r\n        \"caloriesPer\": null,\r\n        \"expirationDate\": \"2022-12-01T00:00:00\",\r\n        \"itemStorageId\": {{testItemStorageId2}},\r\n        \"amount\": 4200,\r\n        \"unit\": 1,\r\n        \"openDate\": \"2022-12-04T00:00:00\",\r\n        \"daysAfterOpen\": 5\r\n}",
+							"raw": "{\r\n\"item1\":{\r\n        \"name\": \"brandnewtest2\",\r\n        \"caloriesPer\": null,\r\n        \"expirationDate\": \"2022-12-01T00:00:00\",\r\n        \"itemStorageId\": {{testItemStorageId2}},\r\n        \"amount\": 4200,\r\n        \"unit\": 1,\r\n        \"openDate\": \"2022-12-04T00:00:00\",\r\n        \"daysAfterOpen\": 5\r\n},\r\n\"item2\":[]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
