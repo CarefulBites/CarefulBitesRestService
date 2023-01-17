@@ -339,5 +339,29 @@ namespace CarefulBitesAPI.Controllers {
             };
         }
         #endregion
+
+        #region Templates
+        [HttpGet("itemTemplates", Name = "GetItemTemplates")]
+        public ActionResult<IEnumerable<ItemTemplate>> GetItemTemplates()
+        {
+            var templates = _manager.GetTemplates();
+
+            if (templates.Any())
+                return Ok(templates);
+
+            return NoContent();
+        }
+
+        [HttpGet("itemTemplates/{itemTemplateId}", Name = "GetItemTemplate")]
+        public ActionResult<IEnumerable<ItemTemplate>> GetItemTemplate(int itemTemplateId)
+        {
+            var template = _manager.GetTemplate(itemTemplateId);
+
+            if (template != null)
+                return Ok(template);
+
+            return NoContent();
+        }
+        #endregion
     }
 }

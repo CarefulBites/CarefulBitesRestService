@@ -267,5 +267,19 @@ namespace CarefulBitesAPI.Managers {
             return null;
         }
         #endregion
+
+        #region Templates
+        public IEnumerable<ItemTemplate> GetTemplates()
+        {
+            List<ItemTemplate> templateList = _dbContext.ItemTemplates.ToList();
+            return templateList;
+        }
+        public ItemTemplate? GetTemplate(int itemId)
+        {
+            var item = _dbContext.ItemTemplates.Find(itemId);
+
+            return item;
+        }
+        #endregion
     }
 }
