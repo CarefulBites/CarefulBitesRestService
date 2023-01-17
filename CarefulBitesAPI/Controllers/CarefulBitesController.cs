@@ -1,4 +1,5 @@
 using CarefulBitesAPI.Managers;
+using CarefulBitesAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,13 +54,29 @@ namespace CarefulBitesAPI.Controllers {
         }
 
         [HttpPost("foodItems", Name = "PostFoodItem")]
-        public ActionResult PostFoodItem([FromBody] Item foodItem) {
-            foodItem.ItemId = null;
+        public ActionResult PostFoodItem([FromBody] Tuple<Item, int[]?> tuple)
+        {
+            tuple.Item1.ItemId = null;
 
-            var createdItem = _manager.PostFoodItem(foodItem);
+            var createdItem = _manager.PostFoodItem(tuple.Item1);
 
             if (createdItem != null)
+            {
+                if (tuple.Item2 != null)
+                {
+                    foreach (var categoryId in tuple.Item2)
+                    {
+                        var newItemCategoryBinding = new ItemCategoryBinding
+                        {
+                            CategoryId = categoryId,
+                            ItemId = (int)createdItem.ItemId
+                        };
+                        _manager.PostItemCategoryBinding(newItemCategoryBinding);
+                    }
+                }
+
                 return Created(new Uri(_baseUri, $"foodItems/{createdItem.ItemId}"), createdItem);
+            }
 
             return BadRequest();
         }
@@ -234,6 +251,116 @@ namespace CarefulBitesAPI.Controllers {
                 ClientError.Conflict => Conflict(),
                 _ => BadRequest()
             };
+        }
+        #endregion
+
+        #region categories
+        [HttpGet("categories", Name = "GetCategories")]
+        public ActionResult GetCategories() {
+            var categories = _manager.GetCategories();
+
+            if (categories.Any()) {
+                return Ok(categories);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("categories", Name = "PostCategory")]
+        public ActionResult PostCategory([FromBody] Category category) {
+            category.CategoryId = null;
+
+            var createdCategory = _manager.PostCategory(category);
+            return Created(new Uri(_baseUri, $"categories/{category.CategoryId}"), createdCategory);
+        }
+
+        [HttpPatch("categories/{categoryId}", Name = "PatchCategory")]
+        public ActionResult PatchCategory(int categoryId, [FromBody] JsonPatchDocument<Category> value) {
+            var error = _manager.PatchCategory(categoryId, value);
+
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
+        }
+
+        [HttpDelete("categories/{categoryId}", Name = "DeleteCategory")]
+        public ActionResult DeleteCategory(int categoryId) {
+            var error = _manager.DeleteCategory(categoryId);
+
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
+        }
+        #endregion
+
+        #region itemCategoryBindings
+        [HttpGet("itemCategoryBindings", Name = "GetItemCategoryBindings")]
+        public ActionResult GetItemCategoryBindings() {
+            var itemCategoryBindings = _manager.GetItemCategoryBindings();
+
+            if (itemCategoryBindings.Any()) {
+                return Ok(itemCategoryBindings);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("itemCategoryBindings", Name = "PostItemCategoryBinding")]
+        public ActionResult PostItemCategoryBinding([FromBody] ItemCategoryBinding itemCategoryBinding) {
+            itemCategoryBinding.ItemCategoryBindingId = null;
+
+            var createdItemCategoryBinding = _manager.PostItemCategoryBinding(itemCategoryBinding);
+            return Created(new Uri(_baseUri, $"itemCategoryBindings/{itemCategoryBinding.ItemCategoryBindingId}"), createdItemCategoryBinding);
+        }
+
+        [HttpPatch("itemCategoryBindings/{itemCategoryBindingId}", Name = "PatchItemCategoryBinding")]
+        public ActionResult PatchItemCategoryBinding(int itemCategoryBindingId, [FromBody] JsonPatchDocument<ItemCategoryBinding> value) {
+            var error = _manager.PatchItemCategoryBinding(itemCategoryBindingId, value);
+
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
+        }
+
+        [HttpDelete("itemCategoryBindings/{itemCategoryBindingId}", Name = "DeleteItemCategoryBinding")]
+        public ActionResult DeleteItemCategoryBinding(int itemCategoryBindingId) {
+            var error = _manager.DeleteItemCategoryBinding(itemCategoryBindingId);
+
+            return error switch {
+                null => NoContent(),
+                ClientError.NotFound => NotFound(),
+                _ => BadRequest()
+            };
+        }
+        #endregion
+
+        #region Templates
+        [HttpGet("itemTemplates", Name = "GetItemTemplates")]
+        public ActionResult<IEnumerable<ItemTemplate>> GetItemTemplates()
+        {
+            var templates = _manager.GetTemplates();
+
+            if (templates.Any())
+                return Ok(templates);
+
+            return NoContent();
+        }
+
+        [HttpGet("itemTemplates/{itemTemplateId}", Name = "GetItemTemplate")]
+        public ActionResult<IEnumerable<ItemTemplate>> GetItemTemplate(int itemTemplateId)
+        {
+            var template = _manager.GetTemplate(itemTemplateId);
+
+            if (template != null)
+                return Ok(template);
+
+            return NoContent();
         }
         #endregion
     }

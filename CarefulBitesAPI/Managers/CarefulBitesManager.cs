@@ -187,5 +187,99 @@ namespace CarefulBitesAPI.Managers {
             _dbContext.SaveChanges();
         }
         #endregion
+
+        #region categories
+        public IEnumerable<Category> GetCategories() {
+            List<Category> categoryList = _dbContext.Categories.ToList();
+
+            return categoryList;
+        }
+
+        public Category? PostCategory(Category category) {
+            var newCategory = _dbContext.Categories.Add(category);
+
+            _dbContext.SaveChanges();
+
+            return newCategory?.Entity;
+        }
+
+        public ClientError? PatchCategory(int categoryId, JsonPatchDocument<Category> value) {
+            var category = _dbContext.Categories.Find(categoryId);
+
+            if (category == null)
+                return ClientError.NotFound;
+
+            value.ApplyTo(category);
+            _dbContext.SaveChanges();
+
+            return null;
+        }
+
+        public ClientError? DeleteCategory(int categoryId) {
+            var category = _dbContext.Categories.Find(categoryId);
+
+            if (category == null)
+                return ClientError.NotFound;
+
+            _dbContext.Categories.Remove(category);
+            _dbContext.SaveChanges();
+
+            return null;
+        }
+        #endregion
+
+        #region itemCategoryBindings
+        public IEnumerable<ItemCategoryBinding> GetItemCategoryBindings() {
+            List<ItemCategoryBinding> itemCategoryBindingList = _dbContext.ItemCategoryBindings.ToList();
+
+            return itemCategoryBindingList;
+        }
+
+        public ItemCategoryBinding? PostItemCategoryBinding(ItemCategoryBinding itemCategoryBinding) {
+            var newItemCategoryBinding = _dbContext.ItemCategoryBindings.Add(itemCategoryBinding);
+
+            _dbContext.SaveChanges();
+
+            return newItemCategoryBinding?.Entity;
+        }
+
+        public ClientError? PatchItemCategoryBinding(int itemCategoryBindingId, JsonPatchDocument<ItemCategoryBinding> value) {
+            var itemCategoryBinding = _dbContext.ItemCategoryBindings.Find(itemCategoryBindingId);
+
+            if (itemCategoryBinding == null)
+                return ClientError.NotFound;
+
+            value.ApplyTo(itemCategoryBinding);
+            _dbContext.SaveChanges();
+
+            return null;
+        }
+
+        public ClientError? DeleteItemCategoryBinding(int itemCategoryBindingId) {
+            var itemCategoryBinding = _dbContext.Categories.Find(itemCategoryBindingId);
+
+            if (itemCategoryBinding == null)
+                return ClientError.NotFound;
+
+            _dbContext.Categories.Remove(itemCategoryBinding);
+            _dbContext.SaveChanges();
+
+            return null;
+        }
+        #endregion
+
+        #region Templates
+        public IEnumerable<ItemTemplate> GetTemplates()
+        {
+            List<ItemTemplate> templateList = _dbContext.ItemTemplates.ToList();
+            return templateList;
+        }
+        public ItemTemplate? GetTemplate(int itemId)
+        {
+            var item = _dbContext.ItemTemplates.Find(itemId);
+
+            return item;
+        }
+        #endregion
     }
 }
