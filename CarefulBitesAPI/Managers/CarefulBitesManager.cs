@@ -256,12 +256,12 @@ namespace CarefulBitesAPI.Managers {
         }
 
         public ClientError? DeleteItemCategoryBinding(int itemCategoryBindingId) {
-            var itemCategoryBinding = _dbContext.Categories.Find(itemCategoryBindingId);
+            var itemCategoryBinding = _dbContext.ItemCategoryBindings.Find(itemCategoryBindingId);
 
             if (itemCategoryBinding == null)
                 return ClientError.NotFound;
 
-            _dbContext.Categories.Remove(itemCategoryBinding);
+            _dbContext.ItemCategoryBindings.Remove(itemCategoryBinding);
             _dbContext.SaveChanges();
 
             return null;
