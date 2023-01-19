@@ -94,6 +94,15 @@ namespace CarefulBitesAPI.Controllers {
 
         [HttpDelete("foodItems/{itemId}", Name = "DeleteFoodItem")]
         public ActionResult DeleteFoodItem(int itemId) {
+
+            List<ItemCategoryBinding> bindings = _manager.GetItemCategoryBindings().Where(b=> b.ItemId == itemId).ToList();
+            if (bindings.Count > 0)
+            {
+                foreach (var binding in bindings)
+                {
+                    _manager.DeleteItemCategoryBinding((int)binding.ItemCategoryBindingId);
+                }
+            }
             var error = _manager.DeleteFoodItem(itemId);
 
             return error switch {
