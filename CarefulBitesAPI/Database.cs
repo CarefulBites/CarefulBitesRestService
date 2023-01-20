@@ -35,6 +35,7 @@ namespace CarefulBitesAPI
     public interface ICarefulBitesDbContext : IDisposable
     {
         DbSet<Category> Categories { get; set; } // Category
+        DbSet<Giveaway> Giveaways { get; set; } // Giveaway
         DbSet<Item> Items { get; set; } // Items
         DbSet<ItemCategoryBinding> ItemCategoryBindings { get; set; } // ItemCategoryBinding
         DbSet<ItemStorage> ItemStorages { get; set; } // ItemStorage
@@ -133,6 +134,7 @@ namespace CarefulBitesAPI
         }
 
         public DbSet<Category> Categories { get; set; } // Category
+        public DbSet<Giveaway> Giveaways { get; set; } // Giveaway
         public DbSet<Item> Items { get; set; } // Items
         public DbSet<ItemCategoryBinding> ItemCategoryBindings { get; set; } // ItemCategoryBinding
         public DbSet<ItemStorage> ItemStorages { get; set; } // ItemStorage
@@ -163,6 +165,7 @@ namespace CarefulBitesAPI
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new GiveawayConfiguration());
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
             modelBuilder.ApplyConfiguration(new ItemCategoryBindingConfiguration());
             modelBuilder.ApplyConfiguration(new ItemStorageConfiguration());
@@ -397,6 +400,7 @@ namespace CarefulBitesAPI
     public class FakeCarefulBitesDbContext : ICarefulBitesDbContext
     {
         public DbSet<Category> Categories { get; set; } // Category
+        public DbSet<Giveaway> Giveaways { get; set; } // Giveaway
         public DbSet<Item> Items { get; set; } // Items
         public DbSet<ItemCategoryBinding> ItemCategoryBindings { get; set; } // ItemCategoryBinding
         public DbSet<ItemStorage> ItemStorages { get; set; } // ItemStorage
@@ -410,6 +414,7 @@ namespace CarefulBitesAPI
             _database = new FakeDatabaseFacade(new CarefulBitesDbContext());
 
             Categories = new FakeDbSet<Category>("CategoryId");
+            Giveaways = new FakeDbSet<Giveaway>("GiveawayId");
             Items = new FakeDbSet<Item>("ItemId");
             ItemCategoryBindings = new FakeDbSet<ItemCategoryBinding>("ItemCategoryBindingId");
             ItemStorages = new FakeDbSet<ItemStorage>("ItemStorageId");
@@ -1189,6 +1194,32 @@ namespace CarefulBitesAPI
         }
     }
 
+    // Giveaway
+    public class Giveaway
+    {
+        public int? GiveawayId { get; set; } // GiveawayId (Primary key)
+        public int UserId { get; set; } // UserId
+        public byte[] Timestamp { get; set; } // Timestamp (length: 8)
+        public int HoursAlive { get; set; } // HoursAlive
+        public int ItemId { get; set; } // ItemId
+        public int? AmountToGive { get; set; } // AmountToGive
+        public string Address { get; set; } // Address (length: 255)
+        public int Latitude { get; set; } // Latitude
+        public int Longitude { get; set; } // Longitude
+
+        // Foreign keys
+
+        /// <summary>
+        /// Parent Item pointed by [Giveaway].([ItemId]) (FK__Giveaway__ItemId__4F47C5E3)
+        /// </summary>
+        //public virtual Item Item { get; set; } // FK__Giveaway__ItemId__4F47C5E3
+
+        /// <summary>
+        /// Parent User pointed by [Giveaway].([UserId]) (FK__Giveaway__UserId__503BEA1C)
+        /// </summary>
+        //public virtual User User { get; set; } // FK__Giveaway__UserId__503BEA1C
+    }
+
     // Items
     public class Item
     {
@@ -1204,6 +1235,11 @@ namespace CarefulBitesAPI
         public int? ItemTypeId { get; set; } // ItemTypeId
 
         // Reverse navigation
+
+        /// <summary>
+        /// Child Giveaways where [Giveaway].[ItemId] point to this entity (FK__Giveaway__ItemId__4F47C5E3)
+        /// </summary>
+        //public virtual ICollection<Giveaway> Giveaways { get; set; } // Giveaway.FK__Giveaway__ItemId__4F47C5E3
 
         /// <summary>
         /// Child ItemCategoryBindings where [ItemCategoryBinding].[ItemId] point to this entity (FK__ItemCateg__ItemI__31B762FC)
@@ -1224,6 +1260,7 @@ namespace CarefulBitesAPI
 
         public Item()
         {
+            //Giveaways = new List<Giveaway>();
             //ItemCategoryBindings = new List<ItemCategoryBinding>();
         }
     }
@@ -1260,25 +1297,25 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Child Items where [Items].[ItemStorageId] point to this entity (FK__Items__ItemStora__70DDC3D8)
         /// </summary>
-        public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemStora__70DDC3D8
+        //public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemStora__70DDC3D8
 
         // Foreign keys
 
         /// <summary>
         /// Parent User pointed by [ItemStorage].([UserId]) (FK__ItemStora__UserI__6477ECF3)
         /// </summary>
-        public virtual User User { get; set; } // FK__ItemStora__UserI__6477ECF3
+        //public virtual User User { get; set; } // FK__ItemStora__UserI__6477ECF3
 
         public ItemStorage()
         {
-            Items = new List<Item>();
+            //Items = new List<Item>();
         }
     }
 
     // ItemTemplate
     public class ItemTemplate
     {
-        public int ItemTemplateId { get; set; } // ItemTemplateId (Primary key)
+        public int? ItemTemplateId { get; set; } // ItemTemplateId (Primary key)
         public string Name { get; set; } // Name (length: 50)
         public int? CaloriesPer { get; set; } // CaloriesPer
         public double Amount { get; set; } // Amount
@@ -1291,13 +1328,13 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Parent ItemType pointed by [ItemTemplate].([ItemTypeId]) (FK__ItemTempl__ItemT__3D2915A8)
         /// </summary>
-        public virtual ItemType ItemType { get; set; } // FK__ItemTempl__ItemT__3D2915A8
+        //public virtual ItemType ItemType { get; set; } // FK__ItemTempl__ItemT__3D2915A8
     }
 
     // ItemType
     public class ItemType
     {
-        public int ItemTypeId { get; set; } // ItemTypeId (Primary key)
+        public int? ItemTypeId { get; set; } // ItemTypeId (Primary key)
         public string Name { get; set; } // Name (length: 50)
 
         // Reverse navigation
@@ -1305,17 +1342,17 @@ namespace CarefulBitesAPI
         /// <summary>
         /// Child Items where [Items].[ItemTypeId] point to this entity (FK__Items__ItemTypeI__395884C4)
         /// </summary>
-        public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemTypeI__395884C4
+        //public virtual ICollection<Item> Items { get; set; } // Items.FK__Items__ItemTypeI__395884C4
 
         /// <summary>
         /// Child ItemTemplates where [ItemTemplate].[ItemTypeId] point to this entity (FK__ItemTempl__ItemT__3D2915A8)
         /// </summary>
-        public virtual ICollection<ItemTemplate> ItemTemplates { get; set; } // ItemTemplate.FK__ItemTempl__ItemT__3D2915A8
+        //public virtual ICollection<ItemTemplate> ItemTemplates { get; set; } // ItemTemplate.FK__ItemTempl__ItemT__3D2915A8
 
         public ItemType()
         {
-            Items = new List<Item>();
-            ItemTemplates = new List<ItemTemplate>();
+            //Items = new List<Item>();
+            //ItemTemplates = new List<ItemTemplate>();
         }
     }
 
@@ -1341,13 +1378,19 @@ namespace CarefulBitesAPI
         // Reverse navigation
 
         /// <summary>
+        /// Child Giveaways where [Giveaway].[UserId] point to this entity (FK__Giveaway__UserId__503BEA1C)
+        /// </summary>
+        //public virtual ICollection<Giveaway> Giveaways { get; set; } // Giveaway.FK__Giveaway__UserId__503BEA1C
+
+        /// <summary>
         /// Child ItemStorages where [ItemStorage].[UserId] point to this entity (FK__ItemStora__UserI__6477ECF3)
         /// </summary>
-        public virtual ICollection<ItemStorage> ItemStorages { get; set; } // ItemStorage.FK__ItemStora__UserI__6477ECF3
+        //public virtual ICollection<ItemStorage> ItemStorages { get; set; } // ItemStorage.FK__ItemStora__UserI__6477ECF3
 
         public User()
         {
-            ItemStorages = new List<ItemStorage>();
+            //Giveaways = new List<Giveaway>();
+            //ItemStorages = new List<ItemStorage>();
         }
     }
 
@@ -1370,6 +1413,30 @@ namespace CarefulBitesAPI
 
             builder.Property(x => x.CategoryId).HasColumnName(@"CategoryId").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityColumn();
             builder.Property(x => x.Name).HasColumnName(@"Name").HasColumnType("varchar(50)").IsRequired().IsUnicode(false).HasMaxLength(50);
+        }
+    }
+
+    // Giveaway
+    public class GiveawayConfiguration : IEntityTypeConfiguration<Giveaway>
+    {
+        public void Configure(EntityTypeBuilder<Giveaway> builder)
+        {
+            builder.ToTable("Giveaway", "dbo");
+            builder.HasKey(x => x.GiveawayId).HasName("PK__Giveaway__CE8D11045D469A09").IsClustered();
+
+            builder.Property(x => x.GiveawayId).HasColumnName(@"GiveawayId").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityColumn();
+            builder.Property(x => x.UserId).HasColumnName(@"UserId").HasColumnType("int").IsRequired();
+            builder.Property(x => x.Timestamp).HasColumnName(@"Timestamp").HasColumnType("timestamp(8)").IsRequired().IsFixedLength().HasMaxLength(8).IsRowVersion().IsConcurrencyToken();
+            builder.Property(x => x.HoursAlive).HasColumnName(@"HoursAlive").HasColumnType("int").IsRequired();
+            builder.Property(x => x.ItemId).HasColumnName(@"ItemId").HasColumnType("int").IsRequired();
+            builder.Property(x => x.AmountToGive).HasColumnName(@"AmountToGive").HasColumnType("int").IsRequired(false);
+            builder.Property(x => x.Address).HasColumnName(@"Address").HasColumnType("nvarchar(255)").IsRequired(false).HasMaxLength(255);
+            builder.Property(x => x.Latitude).HasColumnName(@"Latitude").HasColumnType("int").IsRequired();
+            builder.Property(x => x.Longitude).HasColumnName(@"Longitude").HasColumnType("int").IsRequired();
+
+            // Foreign keys
+            //builder.HasOne(a => a.Item).WithMany(b => b.Giveaways).HasForeignKey(c => c.ItemId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Giveaway__ItemId__4F47C5E3");
+            //builder.HasOne(a => a.User).WithMany(b => b.Giveaways).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Giveaway__UserId__503BEA1C");
         }
     }
 
@@ -1429,7 +1496,7 @@ namespace CarefulBitesAPI
             builder.Property(x => x.UserId).HasColumnName(@"UserId").HasColumnType("int").IsRequired();
 
             // Foreign keys
-            builder.HasOne(a => a.User).WithMany(b => b.ItemStorages).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemStora__UserI__6477ECF3");
+            //builder.HasOne(a => a.User).WithMany(b => b.ItemStorages).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemStora__UserI__6477ECF3");
         }
     }
 
@@ -1450,7 +1517,7 @@ namespace CarefulBitesAPI
             builder.Property(x => x.ItemTypeId).HasColumnName(@"ItemTypeId").HasColumnType("int").IsRequired(false);
 
             // Foreign keys
-            builder.HasOne(a => a.ItemType).WithMany(b => b.ItemTemplates).HasForeignKey(c => c.ItemTypeId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemTempl__ItemT__3D2915A8");
+            //builder.HasOne(a => a.ItemType).WithMany(b => b.ItemTemplates).HasForeignKey(c => c.ItemTypeId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__ItemTempl__ItemT__3D2915A8");
         }
     }
 
